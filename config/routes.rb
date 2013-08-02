@@ -1,5 +1,8 @@
 Projectionist::Application.routes.draw do
-  
+  devise_for :users
+
+  root :to => 'user#show'
+    
   resource :user do
     resources :projects
     resource :company do
@@ -8,6 +11,8 @@ Projectionist::Application.routes.draw do
       resource :cash_flow
     end
   end
+
+  resource :session, :only => [:new, :create, :destroy]
 
   
 

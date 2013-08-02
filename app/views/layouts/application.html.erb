@@ -8,6 +8,12 @@
 </head>
 <body>
 
+<% if flash[:notices] %>
+  <% flash[:notices].count.times do |i| %>
+    <%= flash[:notice].shift %>
+  <% end %>
+<% end %>
+
 <%= yield %>
 
 </body>
