@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Projectionist</title>
+    <link rel="stylesheet" href="./assets/stylesheets/home.css"
+  </head>
+
+  <body>
+    <header>
+      <h2><a href="/">Projectionist</a></h2>
+      <ul>
+        <li><a href="/sessions/new">Login</a></li>
+        <li><a href="/users/new">Sign Up</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <div class="register-form">
+        Register<br>
+        <form action="/users" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <label>Email:<input name="user[email]"></label><br>
+          <label>Password:<input type="password" name="user[password]"></label><br>
+          <input type="submit" value="Register">
+        </form>
+      </div>
+      <img src="#" id="pseudochart">
+    </section>
+  </body>
+</html>
