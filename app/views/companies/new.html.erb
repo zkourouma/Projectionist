@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>New Company</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section>
+      <div class="new-company-form">
+        <h2>New Company Profile</h2>
+        <form action="<%= user_company_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <td>Name:</td>
+              <td><input name="company[name]"></td>
+            </tr>
+            <tr>
+              <td>Headquarters:</td>
+              <td><textarea name="company[headquarters]"
+            style="vertical-align:top"></textarea></td>
+            </tr>
+            <tr>
+              <td>Industry:</td>
+              <td>
+                <select>
+                  <% @industries.each do |industry| %>
+                    <option value="<%= industry.id %>"><%= industry.name %></option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td># of Employees:</td>
+              <td><input type="number"></td>
+            </tr>
+          </table>
+          <!-- upload company logo -->
+          <input type="submit" value="Next">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,18 +1,31 @@
-body, header, section, div, ul, li, a{
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+.landing{
+  width: 800px;
+  margin: auto;
 }
-
-header > h2{
+.login-header{
   display: block;
-  float: left;
-
+  border-bottom: 1px solid #ccc;
+  margin: 10px auto;
 }
 
-header > ul{
-  
+.login-header > h2{
+  float: left;
+}
+
+.login-header > h2 > a{
+  color: #333;
+  text-decoration: none;
+}
+
+.login-header > h3{
+  float: right;
+}
+
+.login-header > h3 > a{
+  color: #333;
+  text-decoration: none;
+}
+
+#fake-chart{
+  float: left;
 }

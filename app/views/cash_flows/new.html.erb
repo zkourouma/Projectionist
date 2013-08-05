@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <title>New CF</title>
+    <link rel="stylesheet" href="./assets/stylesheets/register.css">
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section>
+      <div class="new-CF-form">
+        <h2>New Cash Flow</h2><br>
+        <form action="<%= user_company_cash_flow_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <th>Line item:</th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[0] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[1] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[2] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[3] %></th>
+            </tr>
+            <tr>
+              Operating Activities
+            </tr>
+            <tr>
+              <td>Depreciation:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="depreciation"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"
+                  value=""></td>
+
+              <% end %>
+            </tr>
+            <tr>
+              <td>Change in Accounts Receivable:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="delta_receivables"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Change in Liabilities:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="delta_liabilities"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Change in Inventories:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="delta_inventories"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              Investing Activities
+            </tr>
+            <tr>
+              <td>Capital Expenditures:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="capex"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Investments:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="investments"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              Financing
+            </tr>
+            <tr>
+              <td>Dividends Paid:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="divs_paid"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Sale of Stock:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="divs_paid"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Net Borrowings:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
+                  value="net_borrowings"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+          </table>
+          <input type="submit" value="Complete">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

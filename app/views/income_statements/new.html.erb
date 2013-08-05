@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>New IS</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section>
+      <div class="new-IS-form">
+        <h2>New Income Statement</h2><br>
+        <form action="<%= user_company_income_statement_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <th>Line item:</th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[0] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[1] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[2] %></th>
+              <th></th>
+              <th></th>
+              <th><%= @quarters[3] %></th>
+            </tr>
+            <tr>
+              <td>Revenue:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="revs"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"
+                  value=""></td>
+
+              <% end %>
+            </tr>
+            <tr>
+              <td>Cost of Revs:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="cor"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Operating Expenses:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="opex"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Research & Development:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="rd"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Selling, General, & Administrative:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="sga"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Interest Expense:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="interest"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Income Tax:</td>
+              <% @quarters.each_with_index do |q, q_i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][name]"
+                  value="tax"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= q_i %>][period]"
+                  value="<%= q %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= q_i %>][value]"></td>
+              <% end %>
+            </tr>
+          </table>
+          <input type="submit" value="Next">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

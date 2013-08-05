@@ -11,3 +11,31 @@
  *= require_self
  *= require_tree .
  */
+
+.group:after{
+  content: "";
+  clear: both;
+  display: table;
+}
+body, header, section, div, ul, li, a{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  font-family: sans-serif;
+}
+
+section{
+  width: 800px;
+  margin: 20px auto;
+}
+
+th{
+  text-align: center;
+}
+
+th:first-child{
+  text-align: justify;
+}

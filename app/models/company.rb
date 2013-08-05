@@ -2,5 +2,8 @@ class Company < ActiveRecord::Base
   attr_accessible :employees, :headquarters, :industry, :name, :user_id
 
   belongs_to :user
-  has_many :statements, :class_name => ["Income Statement", "Balance Sheet", "Cash Flow"]
+  has_many :statements, :class_name => ["IncomeStatement", "BalanceSheet", "CashFlow"]
+  has_one :income, class_name: 'IncomeStatement'
+  has_one :balance, class_name: 'BalanceSheet'
+  has_one :cashflow, class_name: 'CashFlow'
 end

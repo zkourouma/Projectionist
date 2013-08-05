@@ -1,4 +1,7 @@
-<header>
-  <h2><a href="/">Projectionist</a></h2>
-  <h3><button class="logout-button">Logout</button></h3>
+<header class="group" style="width:800px; margin:auto; border-bottom: 1px solid #ccc;">
+  <h2 style="float:left"><a style="text-decoration:none" href="/">
+    <!-- some img file -->Projectionist</a></h2>
+  <form action="<%= destroy_user_session_url %>" method="post" style="float:right">
+    <input type="hidden" name="_method" value="delete">
+    <button type="submit" class="logout-button">Logout</button></form>
 </header>

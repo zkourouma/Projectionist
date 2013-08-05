@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>Projectionist</title>
+</head>
+
+<body>
+  <section class="landing">
+    <header class="login-header group">
+      <h2><a href="/">Projectionist</a></h2>
+    </header>
+    <div id="new-user-form">
+      <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+        <%= devise_error_messages! %>
+
+        <div><%= f.label :email %><br />
+        <%= f.email_field :email, :autofocus => true %></div>
+
+        <div><%= f.label :password %><br />
+        <%= f.password_field :password %></div>
+
+        <div><%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation %></div>
+
+        <div><%= f.submit "Sign up" %></div>
+      <% end %>
+    </div>
+    <img id="fake-chart" src="#">
+  </section>
+</body>
+</html>

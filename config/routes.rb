@@ -1,7 +1,9 @@
 Projectionist::Application.routes.draw do
-  devise_for :users
+  devise_for :user, controllers: {:registration => 'registrations'}
 
-  root :to => 'user#show'
+  root :to => 'companies#show'
+
+  match 'user_root' => 'users#show'
     
   resource :user do
     resources :projects
@@ -12,7 +14,6 @@ Projectionist::Application.routes.draw do
     end
   end
 
-  resource :session, :only => [:new, :create, :destroy]
 
   
 
