@@ -4,7 +4,7 @@ class CreateMetrics < ActiveRecord::Migration
       t.string :name
       t.integer :quarter
       t.integer :year
-      t.integer :value
+      t.float :value
       t.integer :statement_id
 
       t.timestamps
