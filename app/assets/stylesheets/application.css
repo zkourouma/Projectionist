@@ -28,7 +28,7 @@ body, header, section, div, ul, li, a{
 }
 
 section{
-  width: 800px;
+  width: 1000px;
   margin: 20px auto;
 }
 
@@ -38,4 +38,19 @@ th{
 
 th:first-child{
   text-align: justify;
+}
+
+a{
+  text-decoration: none;
+}
+
+.sidebar{
+  display: block;
+  float: left;
+  width: 150px;
+  height: 100%;
+}
+
+.sidebar > a {
+  color: #333;
 }

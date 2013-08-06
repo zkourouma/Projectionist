@@ -2,8 +2,12 @@ class Company < ActiveRecord::Base
   attr_accessible :employees, :headquarters, :industry, :name, :user_id
 
   belongs_to :user
-  has_many :statements, :class_name => ["IncomeStatement", "BalanceSheet", "CashFlow"]
+  has_many :projects
   has_one :income, class_name: 'IncomeStatement'
   has_one :balance, class_name: 'BalanceSheet'
   has_one :cashflow, class_name: 'CashFlow'
+
+  def gross_profit
+    Metric.where("statementable_id = #{income.id}").where(name:["revs", "cor"])
+  end
 end

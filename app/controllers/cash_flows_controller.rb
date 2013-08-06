@@ -1,7 +1,7 @@
 class CashFlowsController < ApplicationController
 
   def new
-    @quarters = new_quarters
+    @quarters = new_quarter
   end
 
   def create
@@ -9,7 +9,7 @@ class CashFlowsController < ApplicationController
     @cashflow = CashFlow.new(params[:cashflow])
 
     if @cashflow.save
-      redirect_to new_user_company_cash_flow_url
+      redirect_to user_company_url
     else
       flash.notice = "Could not save balance sheet"
       render :new

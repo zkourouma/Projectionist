@@ -1,7 +1,8 @@
 class CreateIncomeStatements < ActiveRecord::Migration
   def change
     create_table :income_statements do |t|
-      t.string :company_id
+      t.integer :company_id
+      t.integer :user_id
 
       t.timestamps
     end

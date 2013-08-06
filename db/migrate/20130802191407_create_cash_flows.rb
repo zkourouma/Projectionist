@@ -1,7 +1,8 @@
 class CreateCashFlows < ActiveRecord::Migration
   def change
     create_table :cash_flows do |t|
-      t.string :company_id
+      t.integer :company_id
+      t.integer :user_id
 
       t.timestamps
     end

@@ -1,26 +1,18 @@
 <head>
 </head>
 <body>
-  <section class="sidebar group">
-    <div class="projects-index">
-    <% @projects.each do |project| %>
-      <%= link_to project.name user_project_url(project) %>
-    <% end %>
-  </div>
-  <div class="my-profile">
-    <%= link_to "My Profile" edit_user_url %>
-  </div>
-  <div class="company-profile">
-    <%= link_to "Company Profile" edit_user_company_url %>
-  </div>
-  </section>
-
+  <%= render :partial => 'shared/logoutheader' %>
   <section class="company-show group">
-    <!-- something -->
-    <% @projects.each do |project| %>
-      <a href="<%= user_project_url(project) %>"><%= project.name %></a>
-    <% end %>
-    <br><%= @company.name %>
-    <br><%= @user.name %>
+    <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+    <form action="<%= new_user_project_url %>" method="post" style="float:right">
+      <button type="submit" class="new-project-button">Create New Project</button></form>
+    <article class="company-content">
+      <!-- something -->
+      <%# @projects.each do |project| %>
+        <a href="<%#= user_project_url(project) %>"><%#= project.name %></a>
+      <%# end %>
+      <br><span id="company-name"><%= @company.name %></span>
+      <br><span id="user-email"><%= @user.email %></span>
+    </article>
   </section>
 </body>

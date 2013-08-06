@@ -14,13 +14,15 @@
 ActiveRecord::Schema.define(:version => 20130805222038) do
 
   create_table "balance_sheets", :force => true do |t|
-    t.string   "company_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   create_table "cash_flows", :force => true do |t|
-    t.string   "company_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -36,7 +38,8 @@ ActiveRecord::Schema.define(:version => 20130805222038) do
   end
 
   create_table "income_statements", :force => true do |t|
-    t.string   "company_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
