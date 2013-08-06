@@ -37,6 +37,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # To use debugger
 gem 'debugger'
 gem 'scruffy'
+gem 'd3-rails'
 gem 'backbone-on-rails'
 gem 'devise'
 gem 'quiet_assets'

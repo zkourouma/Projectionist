@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130805222038) do
+ActiveRecord::Schema.define(:version => 20130806174526) do
 
   create_table "balance_sheets", :force => true do |t|
     t.integer  "company_id"
@@ -52,12 +52,13 @@ ActiveRecord::Schema.define(:version => 20130805222038) do
 
   create_table "metrics", :force => true do |t|
     t.string   "name"
-    t.string   "period"
     t.integer  "value"
     t.integer  "statementable_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.string   "statementable_type"
+    t.integer  "year"
+    t.integer  "quarter"
   end
 
   add_index "metrics", ["statementable_id"], :name => "index_metrics_on_statementable_id"

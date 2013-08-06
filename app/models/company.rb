@@ -6,8 +6,4 @@ class Company < ActiveRecord::Base
   has_one :income, class_name: 'IncomeStatement'
   has_one :balance, class_name: 'BalanceSheet'
   has_one :cashflow, class_name: 'CashFlow'
-
-  def gross_profit
-    Metric.where("statementable_id = #{income.id}").where(name:["revs", "cor"])
-  end
 end

@@ -16,16 +16,20 @@
               <th>Line item:</th>
               <th></th>
               <th></th>
-              <th><%= @quarters[0] %></th>
+              <th></th>
+              <th><%= "#{@quarters[0][0]}Q#{@quarters[0][1]}" %></th>
               <th></th>
               <th></th>
-              <th><%= @quarters[1] %></th>
+              <th></th>
+              <th><%= "#{@quarters[1][0]}Q#{@quarters[1][1]}" %></th>
               <th></th>
               <th></th>
-              <th><%= @quarters[2] %></th>
+              <th></th>
+              <th><%= "#{@quarters[2][0]}Q#{@quarters[2][1]}" %></th>
               <th></th>
               <th></th>
-              <th><%= @quarters[3] %></th>
+              <th></th>
+              <th><%= "#{@quarters[3][0]}Q#{@quarters[3][1]}" %></th>
             </tr>
             <tr>
               <td><h3>Assets</h3></td>
@@ -35,8 +39,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i %>][name]"
                   value="cash"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i %>][value]"></td>
               <% end %>
             </tr>
@@ -45,8 +51,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 1 %>][name]"
                   value="receivables"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 1 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 1 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 1 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 1 %>][value]"></td>
               <% end %>
             </tr>
@@ -55,18 +63,22 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 2 %>][name]"
                   value="inventory"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 2 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 2 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 2 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 2 %>][value]"></td>
               <% end %>
             </tr>
             <tr>
               <td>Long Term Investments:</td>
-              <% @quarters.each do |q| %>
+              <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 3 %>][name]"
                   value="lti"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 3 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 3 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 3 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 3 %>][value]"></td>
               <% end %>
             </tr>
@@ -75,8 +87,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 4 %>][name]"
                   value="ppe"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 4 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 4 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 4 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 4 %>][value]"></td>
               <% end %>
             </tr>
@@ -85,8 +99,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 5 %>][name]"
                   value="goodwill"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 5 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 5 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 5 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 5 %>][value]"></td>
               <% end %>
             </tr>
@@ -95,8 +111,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 6 %>][name]"
                   value="amortization"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 6 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 6 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 6 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 6 %>][value]"></td>
               <% end %>
             </tr>
@@ -108,8 +126,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 7 %>][name]"
                   value="payables"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 7 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 7 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 7 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 7 %>][value]"></td>
               <% end %>
             </tr>
@@ -118,8 +138,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 8 %>][name]"
                   value="std"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 8 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 8 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 8 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 8 %>][value]"></td>
               <% end %>
             </tr>
@@ -128,8 +150,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 9 %>][name]"
                   value="ltd"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 9 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 9 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 9 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 9 %>][value]"></td>
               <% end %>
             </tr>
@@ -141,8 +165,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 10 %>][name]"
                   value="common"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 10 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 10 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 10 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 10 %>][value]"></td>
               <% end %>
             </tr>
@@ -151,8 +177,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 11 %>][name]"
                   value="preferred"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 11 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 11 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 11 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 11 %>][value]"></td>
               <% end %>
             </tr>
@@ -161,8 +189,10 @@
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 12 %>][name]"
                   value="treasury"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 12 %>][period]"
-                  value="<%= q %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 12 %>][quarter]"
+                  value="<%= q[0] %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= q_i + 12 %>][year]"
+                  value="<%= q[1] %>"></td>
                 <td><input type="text" name="balance[metrics_attributes][<%= q_i + 12 %>][value]"></td>
               <% end %>
             </tr>

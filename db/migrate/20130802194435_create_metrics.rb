@@ -2,7 +2,8 @@ class CreateMetrics < ActiveRecord::Migration
   def change
     create_table :metrics do |t|
       t.string :name
-      t.string :period
+      t.integer :quarter
+      t.integer :year
       t.integer :value
       t.integer :statement_id
 
