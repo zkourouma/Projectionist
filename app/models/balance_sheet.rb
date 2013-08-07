@@ -19,8 +19,8 @@ class BalanceSheet < ActiveRecord::Base
           equity_t += (quantity.value.to_f * value.value.to_f)
         end
       end
-      equity_t ||= 0.001
     end
+    equity_t ||= 0.001
     debt.to_f / equity_t
   end
 
@@ -67,11 +67,17 @@ class BalanceSheet < ActiveRecord::Base
 
   def capex(quarter, year)
     expend = Metric.where(statementable_id: id, year: [year, year - 1],
-                          quarter: quarter, name: "ppe").sort{ |a,b| a.year <=> b.year}
+                          quarter: quarter, name: "ppe").sort{ |a,b| a.year <=> b.year}.
+                          map(&:value)
     expend[1] - expend[0]
   end
 
   def working_capital(quarter, year)
-
+    tot = Metric.where(statementable_id: id, year: year, quarter: quarter,
+                        name: ["cash", "receivables", "inventory",
+                                "std", "payables"])
+    assets = tot.select{|el| ["cash", "receivables", "inventory"].include?(el.name)}.map(&:value).inject(:+)
+    liabilities = tot.select{|el| ["std", "payables"].include?(el.name)}.map(&:value).inject(:+)
+    assets - liabilities
   end
 end

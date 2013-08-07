@@ -19,7 +19,16 @@ class IncomeStatement < ActiveRecord::Base
   end
 
   def operating_profit(quarter, year)
-    gross_profit(quarter, year).to_f - opex(quarter, year).to_f
+    cf_id = company.cashflow.id
+    b_id = company.balance.id
+    cogs = Metric.where(statementable_id: id, quarter: quarter, year: year,
+                          name: "cogs").first.value
+    dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
+                          name: "depreciation").first.value
+    amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
+                          name: "amortization").first.value
+    gross_profit(quarter, year).to_f - opex(quarter, year).to_f -
+      cogs - dep - amor
   end
 
   def yoy_operating_profit_delta(quarter, year)
@@ -29,10 +38,13 @@ class IncomeStatement < ActiveRecord::Base
 
   def ebitda(quarter, year)
     eb = operating_profit(quarter, year)
-    da = Metric.where(statementable_id: id, quarter: quarter, year: year,
-                      name: ["depreciation", "amortization"])
-    da.each{|el| eb += el.value }
-    eb
+    cf_id = company.cashflow.id
+    b_id = company.balance.id
+    dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
+                          name: "depreciation").first.value
+    amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
+                          name: "amortization").first.value
+    eb + dep + amor
   end
 
   def yoy_ebitda_delta(quarter, year)
@@ -78,7 +90,7 @@ class IncomeStatement < ActiveRecord::Base
 
   def opex(quarter, year)
     Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: ["sga", "rd", "cogs", "depreciation", "amortization"]).
-                        map(&:value.inject(:+))
+                        name: ["sga", "rd"]).
+                        map(&:value).inject(:+)
   end
 end
