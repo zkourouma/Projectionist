@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
       if company.income
         if company.balance
           if company.cashflow
-            current_user_path
+            root_path
           else
             new_user_company_cash_flow_path
           end

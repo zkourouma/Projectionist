@@ -2,6 +2,7 @@ class CompaniesController < ApplicationController
 
   def new
     @industries = Industry.all
+    @assumes = ASSUMPTION_LIST.map{|ass| Assumption.new(metric_name: ass)}
   end
 
   def create
@@ -24,6 +25,11 @@ class CompaniesController < ApplicationController
   def show
     @user = current_user
     @company = @user.company
-    # @projects = @company.projects
+    @assumptions = @company.assumptions
+    @projects = @company.projects
   end
+
+  ASSUMPTION_LIST = ["revs", "gross_profit", "gross_margin", "operating_profit",
+    "operating_margin", "ebitda", "ebitda_margin", "net_income", "eps", "fcf", "cogs",
+    "cash", "inventory", "receivables", "payables", "ppe", "capex", "opex", "std", "ltd"]
 end

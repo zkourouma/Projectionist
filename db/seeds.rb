@@ -16,6 +16,15 @@ u.save
 c = Company.create(:name => 'Relative Electric', :headquarters => '7 Psuedo pl, New York, NY',
                   :industry => 'Software', :employees => 3, :user_id => 1)
 
+a = Assumption.create(value: 0.2, company_id: 1, metric_name: "revs",
+                        timespan: 1, time_unit: "y", assumption_type: "growth")
+a1 = Assumption.create(value: 0.005, company_id: 1, metric_name: "gross_margin",
+                        timespan: 1, time_unit: "q", assumption_type: "growth")
+a2 = Assumption.create(value: 0.3, company_id: 1, metric_name: "net_income",
+                        timespan: 1, time_unit:"y", assumption_type: "growth")
+a3 = Assumption.create(value: 100, company_id: 1, metric_name: "revs",
+                        timespan: 5, time_unit: "q", assumption_type: "absolute")
+
 i = IncomeStatement.create(:company_id => 1)
 b = BalanceSheet.create(:company_id => 1)
 f = CashFlow.create(:company_id => 1)

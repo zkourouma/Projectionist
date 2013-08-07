@@ -6,11 +6,23 @@
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
     <form action="<%= new_user_project_url %>" method="post" style="float:right">
       <button type="submit" class="new-project-button">Create New Project</button></form>
-    <article class="company-content">
-      <!-- something -->
-      <%# @projects.each do |project| %>
-        <a href="<%#= user_project_url(project) %>"><%#= project.name %></a>
-      <%# end %>
+    <article class="company-content group">
+      <% if @assumptions %>
+        <ul>Assumptions<br>
+          <% @assumptions.each do |assume| %>
+            <% if assume.assumption_type == "growth" %>
+              <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %> <%= assume.name %> growth</li>
+            <% else %>
+            <li><%= assume.value %> <%= assume.name %> in <%= assume.timespan %> <%= assume.time %>(s)</li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+      <% unless @projects.empty? %>
+        <% @projects.each do |project| %>
+          <a href="<%= user_project_url(project) %>"><%= project.name %></a>
+        <% end %>
+      <% end %>
       <br><span id="company-name"><%= @company.name %></span>
       <br><span id="user-email"><%= @user.email %></span>
     </article>

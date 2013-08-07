@@ -13,30 +13,76 @@
           <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
           <table>
             <tr>
-              <td>Name:</td>
+              <td><strong>Name</strong></td>
               <td><input name="company[name]"></td>
             </tr>
             <tr>
-              <td>Headquarters:</td>
+              <td><strong>Headquarters</strong></td>
               <td><textarea name="company[headquarters]"
             style="vertical-align:top"></textarea></td>
             </tr>
             <tr>
-              <td>Industry:</td>
+              <td><strong># of Employees</strong></td>
+              <td><input type="number"></td>
+            </tr>
+            <tr>
+              <td><strong>Industries</strong></td>
+            <% 3.times do |i| %>
+                <td>
+                  <select name="company[company_industries_attributes][<%= i %>][industry_id]">
+                    <option>
+                    </option>
+                    <% @industries.each do |industry| %>
+                      <option value="<%= industry.id %>"><%= industry.name %></option>
+                    <% end %>
+                  </select>
+                </td>
+            <% end %>
+            <tr>
+              <td><strong>Assumptions</strong></td>
+            </tr>
+            <tr>
+            </tr>
+            <% 3.times do |i| %>
+            <tr>
+              <td>Metric <%= i + 1 %> Name</td>
               <td>
-                <select>
-                  <% @industries.each do |industry| %>
-                    <option value="<%= industry.id %>"><%= industry.name %></option>
+                <select name="company[assumptions_attributes][<%= i %>][metric_name]">
+                  <option>
+                  </option>
+                  <% @assumes.each do |assume| %>
+                    <option value="<%= assume.metric_name %>"><%= assume.name %>
+                    </option>
                   <% end %>
                 </select>
               </td>
             </tr>
             <tr>
-              <td># of Employees:</td>
-              <td><input type="number"></td>
+              <td>Metric Value</td>
+              <td><input name="company[assumptions_attributes][<%= i %>][value]">
             </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
+                value="growth">Growth</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
+                value="absolute">Absolute</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
+                value="q">Quarters</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
+                value="y">Years</td>
+            </tr>
+            <tr>
+              <td>Assumption Timespan (choose "1" for growth)</td>
+              <td><input type="number" name="company[assumptions_attributes][<%= i %>][timespan]"></td>
+            </tr>
+            <% end %>
           </table>
           <!-- upload company logo -->
+          <br>
           <input type="submit" value="Next">
         </form>
       </div>

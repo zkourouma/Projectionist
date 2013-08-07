@@ -93,4 +93,22 @@ class IncomeStatement < ActiveRecord::Base
                         name: ["sga", "rd"]).
                         map(&:value).inject(:+)
   end
+
+  def gross_margin(quarter, year)
+    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
+                        name: "revs").first.value
+    gross_profit(quarter, year) / sales
+  end
+
+  def operating_margin(quarter, year)
+    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
+                        name: "revs").first.value
+    operating_profit(quarter, year) / sales
+  end
+
+  def ebitda_margin(quarter, year)
+    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
+                        name: "revs").first.value
+    ebitda(quarter, year) / sales
+  end
 end

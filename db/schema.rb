@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130805222038) do
+ActiveRecord::Schema.define(:version => 20130807200056) do
+
+  create_table "assumptions", :force => true do |t|
+    t.integer  "company_id"
+    t.integer  "project_id"
+    t.integer  "timespan"
+    t.string   "time_unit"
+    t.string   "metric_name"
+    t.string   "assumption_type"
+    t.float    "value"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "balance_sheets", :force => true do |t|
     t.integer  "company_id"
@@ -35,6 +47,13 @@ ActiveRecord::Schema.define(:version => 20130805222038) do
     t.integer  "user_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "company_industries", :force => true do |t|
+    t.string   "company_id"
+    t.string   "industry_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "income_statements", :force => true do |t|

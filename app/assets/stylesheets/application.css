@@ -44,10 +44,15 @@ a{
   text-decoration: none;
 }
 
+.company-show{
+  display:block;
+  margin: 30px auto;
+}
+
 .sidebar{
   display: block;
   float: left;
-  width: 150px;
+  width: 200px;
   height: 100%;
 }
 
