@@ -27,7 +27,7 @@
               <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %>
                 <%= assume.name %> growth</li>
             <% else %>
-            <li><%= assume.value %> <%= assume.name %> in <%= assume.timespan %>
+            <li>$<%= assume.value %>mm in <%= assume.name %> in <%= assume.timespan %>
               <%= assume.time %>(s)</li>
             <% end %>
           <% end %>

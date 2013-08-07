@@ -17,6 +17,10 @@
 
 }
 
+.company-industries{
+  list-style:none;
+}
+
 .financials > ul{
   list-style:none;
 }
