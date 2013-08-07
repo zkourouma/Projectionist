@@ -42,7 +42,6 @@ ActiveRecord::Schema.define(:version => 20130807200056) do
   create_table "companies", :force => true do |t|
     t.string   "name"
     t.string   "headquarters"
-    t.string   "industry"
     t.integer  "employees"
     t.integer  "user_id"
     t.datetime "created_at",   :null => false
@@ -80,14 +79,14 @@ ActiveRecord::Schema.define(:version => 20130807200056) do
     t.string   "statementable_type"
   end
 
-  add_index "metrics", ["statementable_id"], :name => "index_metrics_on_statementable_id"
+  add_index "metrics", ["statementable_id"], :name => "index_metrics_on_statement_id"
 
   create_table "projects", :force => true do |t|
     t.integer  "user_id"
     t.integer  "company_id"
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "name"
   end
 
   create_table "users", :force => true do |t|

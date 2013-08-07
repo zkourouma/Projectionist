@@ -1,3 +1,8 @@
+<%= render :partial => 'shared/logoutheader' %>
+<section class="company-show group">
+<%= render :partial => '../shared/sidebar', locals: {projects: @projects} %>
+
+<article class="company-content group">
 <h2>Edit <%= resource_name.to_s.humanize %></h2>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
@@ -16,14 +21,13 @@
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
 
-  <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <div><%= f.label :current_password %> <i>(to confirm your changes)</i><br />
   <%= f.password_field :current_password %></div>
 
   <div><%= f.submit "Update" %></div>
 <% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), :data => { :confirm => "Are you sure?" }, :method => :delete %></p>
-
+<br>
+<br>
 <%= link_to "Back", :back %>
+</article>
+</section>

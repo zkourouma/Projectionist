@@ -17,6 +17,12 @@ class CompaniesController < ApplicationController
   end
 
   def edit
+    @user = current_user
+    @company = @user.company
+    @assumptions = @company.assumptions
+    @industries = @company.industries
+    @industrials = Industry.all
+    @assumes = ASSUMPTION_LIST.map{|ass| Assumption.new(metric_name: ass)}
   end
 
   def destroy
@@ -27,6 +33,7 @@ class CompaniesController < ApplicationController
     @company = @user.company
     @assumptions = @company.assumptions
     @projects = @company.projects
+    @projects = nil if @projects.empty?
   end
 
   ASSUMPTION_LIST = ["revs", "gross_profit", "gross_margin", "operating_profit",

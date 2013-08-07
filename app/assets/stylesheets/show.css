@@ -12,3 +12,19 @@
 .company-content > ul > li{
   padding:5px;
 }
+
+.company-totals{
+
+}
+
+.financials > ul{
+  list-style:none;
+}
+
+.financials > ul > li > a{
+  color:#06266F;
+}
+
+.show-assumptions > ul {
+  list-style:none;
+}

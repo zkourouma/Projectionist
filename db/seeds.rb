@@ -14,8 +14,8 @@ u.password = 'pass'
 u.save
 
 c = Company.create(:name => 'Relative Electric', :headquarters => '7 Psuedo pl, New York, NY',
-                  :industry => 'Software', :employees => 3, :user_id => 1)
-
+                  :employees => 3, :user_id => 1)
+CompanyIndustry.create(company_id: 1, industry_id: 1)
 a = Assumption.create(value: 0.2, company_id: 1, metric_name: "revs",
                         timespan: 1, time_unit: "y", assumption_type: "growth")
 a1 = Assumption.create(value: 0.005, company_id: 1, metric_name: "gross_margin",

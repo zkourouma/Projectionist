@@ -9,5 +9,6 @@ class CreateMetrics < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :metrics, :statement_id
   end
 end
