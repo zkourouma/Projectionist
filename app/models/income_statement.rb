@@ -41,6 +41,24 @@ class IncomeStatement < ActiveRecord::Base
     op
   end
 
+  def ebitda(quarter, year)
+    eb = operating_profit(quarter, year)
+    da = Metric.where(statementable_id: id, quarter: quarter, year: year,
+                      name: ["depreciation", "amortization"])
+    da.each{|el| eb += el.value }
+    eb
+  end
+
+  def yoy_ebitda_delta(quarter, year)
+    op = [operating_profit(quarter, year-1). operating_profit(quarter, year)]
+    da = Metric.where(statementable_id: id, quarter: quarter, name: ["depreciation", "amortization"]).
+                  where(year: [year, year-1]).sort{ |a,b| a.year <=> b.year}
+    cur_da = da.select{|el| el.year == year}.map(&:value).inject(:+)
+    prev_da = da.select{|el| el.year == year-1}.map(&:value).inject(:+)
+    eb = {absolute: (op[1] + cur_da) - (op[0] + prev_da)}
+    eb[:percent] = (eb[:absolute].to_f / (op[0] + prev_da).to_f)
+  end
+
   def net_income(quarter, year)
     net = operating_profit(quarter, year).to_f
     logist = Metric.where(statementable_id: id, year: year, quarter: quarter, name: ["tax", "interest", "depreciation", "amortization"])
@@ -71,7 +89,7 @@ class IncomeStatement < ActiveRecord::Base
               WHERE c.id = "#{company.id}"
               AND year = "#{year}"
               AND quarter = "#{quarter}"
-              AND m.name IN ("treasury", "common", "preferred")
+              AND m.name IN ("treasury_quantity", "common_quantity", "preferred_quantity")
               GROUP BY m.name
               SQL
     shares = ActiveRecord::Base.connection.execute(query).first
