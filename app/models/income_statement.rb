@@ -6,39 +6,25 @@ class IncomeStatement < ActiveRecord::Base
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
   def gross_profit(quarter, year)
-    results = Metric.where("statementable_id = #{id} and year = #{year} and quarter = #{quarter}").
-                  where(name:["revs", "cogs"])
+    results = Metric.where(statementable_id: id, year: year, quarter: quarter,
+                            name:["revs", "cogs"])
     revs = results.find { |e| e.name == "revs" }
     cor = results.find { |e| e.name == "cogs" }
     revs.value.to_f - cor.value.to_f
   end
 
   def yoy_gross_profit_delta(quarter, year)
-    results = Metric.where("statementable_id = #{id} and quarter = #{quarter}").
-                  where(name:["revs", "cogs"]).where(year: [year, year-1])
-    revs = results.select { |e| e.name == "revs" }.sort{ |a,b| a.year <=> b.year}
-    cogs = results.select { |e| e.name == "cogs" }.sort{ |a,b| a.year <=> b.year}
-    gp = {absolute: (revs[1].value - cogs[1].value) - (revs[0].value - cogs[0].value)}
-    gp[:percent] = (gp[:absolute].to_f/(revs[0].value - cogs[0].value).to_f)
-    gp
+    prev, cur = gross_profit(quarter, year-1), gross_profit(quarter, year)
+    {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
   def operating_profit(quarter, year)
-    gross = gross_profit(quarter, year).to_f
-    opex = Metric.where(statementable_id: id, year: year, quarter: quarter, name: ["sga", "rd"])
-    opex.each{ |el| gross -= el.value}
-    gross
+    gross_profit(quarter, year).to_f - opex(quarter, year).to_f
   end
 
   def yoy_operating_profit_delta(quarter, year)
-    gross = [gross_profit(quarter, year-1).to_f, gross_profit(quarter, year).to_f]
-    opex = Metric.where(statementable_id: id, quarter: quarter, name: ["sga", "rd"]).
-                  where(year: [year, year-1]).sort{ |a,b| a.year <=> b.year}
-    curr_ex = opex.select{|el| el.year == year}.map(&:value).inject(:+)
-    prev_ex = opex.select{|el| el.year == year - 1}.map(&:value).inject(:+)
-    op = {absolute: (gross[1] - curr_ex) - (gross[0] - prev_ex)}
-    op[:percent] = (op[:absolute].to_f/(gross[0] - prev_ex).to_f)
-    op
+    prev, cur = operating_profit(quarter, year-1), operating_profit(quarter, year)
+    {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
   def ebitda(quarter, year)
@@ -50,31 +36,20 @@ class IncomeStatement < ActiveRecord::Base
   end
 
   def yoy_ebitda_delta(quarter, year)
-    op = [operating_profit(quarter, year-1). operating_profit(quarter, year)]
-    da = Metric.where(statementable_id: id, quarter: quarter, name: ["depreciation", "amortization"]).
-                  where(year: [year, year-1]).sort{ |a,b| a.year <=> b.year}
-    cur_da = da.select{|el| el.year == year}.map(&:value).inject(:+)
-    prev_da = da.select{|el| el.year == year-1}.map(&:value).inject(:+)
-    eb = {absolute: (op[1] + cur_da) - (op[0] + prev_da)}
-    eb[:percent] = (eb[:absolute].to_f / (op[0] + prev_da).to_f)
+    prev, cur = ebitda(quarter, year-1), ebitda(quarter, year)
+    {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
   def net_income(quarter, year)
     net = operating_profit(quarter, year).to_f
-    logist = Metric.where(statementable_id: id, year: year, quarter: quarter, name: ["tax", "interest", "depreciation", "amortization"])
+    logist = Metric.where(statementable_id: id, year: year, quarter: quarter, name: ["tax", "interest"])
     logist.each{|el| net -= el.value}
     net
   end
 
   def yoy_net_income_delta(quarter, year)
-    op = [operating_profit(quarter, year-1), operating_profit(quarter, year)]
-    logist = Metric.where(statementable_id: id, quarter: quarter, name: ["tax", "interest", "depreciation", "amortization"]).
-                  where(year: [year, year-1]).sort{ |a,b| a.year <=> b.year}
-    curr_ex = logist.select{|el| el.year == year}.map(&:value).inject(:+)
-    prev_ex = logist.select{|el| el.year == year - 1}.map(&:value).inject(:+)
-    net = {absolute: (op[1] - curr_ex) - (op[0] - prev_ex)}
-    net[:percent] = (net[:absolute].to_f/(op[0] - prev_ex).to_f)
-    net
+    prev, cur = net_income(quarter, year-1), net_income(quarter, year)
+    {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
   def eps(quarter, year)
@@ -98,6 +73,12 @@ class IncomeStatement < ActiveRecord::Base
 
   def yoy_eps_delta(quarter, year)
     cur, prev = eps(quarter, year), eps(quarter, year-1)
-    {absolute: (cur - prev), percent: ((cur-prev)/prev)}
+    {absolute: (cur - prev), percent: ((cur-prev).to_f / prev)}
+  end
+
+  def opex(quarter, year)
+    Metric.where(statementable_id: id, year: year, quarter: quarter,
+                        name: ["sga", "rd", "cogs", "depreciation", "amortization"]).
+                        map(&:value.inject(:+))
   end
 end

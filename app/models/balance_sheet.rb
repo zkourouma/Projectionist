@@ -64,4 +64,14 @@ class BalanceSheet < ActiveRecord::Base
     shares = shares.map(&:value).inject(:+)
     val.to_f / shares
   end
+
+  def capex(quarter, year)
+    expend = Metric.where(statementable_id: id, year: [year, year - 1],
+                          quarter: quarter, name: "ppe").sort{ |a,b| a.year <=> b.year}
+    expend[1] - expend[0]
+  end
+
+  def working_capital(quarter, year)
+
+  end
 end
