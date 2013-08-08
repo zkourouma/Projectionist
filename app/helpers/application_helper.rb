@@ -48,7 +48,7 @@ module ApplicationHelper
       end
     end
     list.each do |metric|
-      results[metric.year][metric.quarter][metric.name] = metric
+      results[metric.display_name][metric.year][metric.quarter] = metric
     end
     results
   end

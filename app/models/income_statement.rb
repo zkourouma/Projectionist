@@ -8,9 +8,11 @@ class IncomeStatement < ActiveRecord::Base
   def gross_profit(quarter, year)
     results = Metric.where(statementable_id: id, year: year, quarter: quarter,
                             name:["revs", "cogs"])
-    revs = results.find { |e| e.name == "revs" }
-    cor = results.find { |e| e.name == "cogs" }
-    revs.value.to_f - cor.value.to_f
+    revs = results.select{ |e| e.name == "revs" }.map(&:value).inject(:+)
+    cogs = results.select{ |e| e.name == "cogs" }.map(&:value).inject(:+)
+    revs ||= 0
+    cogs ||= 0
+    revs - cogs
   end
 
   def yoy_gross_profit_delta(quarter, year)
@@ -22,12 +24,12 @@ class IncomeStatement < ActiveRecord::Base
     cf_id = company.cashflow.id
     b_id = company.balance.id
     cogs = Metric.where(statementable_id: id, quarter: quarter, year: year,
-                          name: "cogs").first.value
+                          name: "cogs").map(&:value).inject(:+)
     dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
-                          name: "depreciation").first.value
+                          name: "depreciation").map(&:value).inject(:+)
     amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
-                          name: "amortization").first.value
-    gross_profit(quarter, year).to_f - opex(quarter, year).to_f -
+                          name: "amortization").map(&:value).inject(:+)
+    gross_profit(quarter, year) - opex(quarter, year) -
       cogs - dep - amor
   end
 
@@ -41,9 +43,9 @@ class IncomeStatement < ActiveRecord::Base
     cf_id = company.cashflow.id
     b_id = company.balance.id
     dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
-                          name: "depreciation").first.value
+                          name: "depreciation").map(&:value).inject(:+)
     amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
-                          name: "amortization").first.value
+                          name: "amortization").map(&:value).inject(:+)
     eb + dep + amor
   end
 
@@ -96,19 +98,19 @@ class IncomeStatement < ActiveRecord::Base
 
   def gross_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").first.value
+                        name: "revs").map(&:value).inject(:+)
     gross_profit(quarter, year) / sales
   end
 
   def operating_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").first.value
+                        name: "revs").map(&:value).inject(:+)
     operating_profit(quarter, year) / sales
   end
 
   def ebitda_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").first.value
+                        name: "revs").map(&:value).inject(:+)
     ebitda(quarter, year) / sales
   end
 
@@ -119,12 +121,16 @@ class IncomeStatement < ActiveRecord::Base
     @@operations_list.each do |op|
       # operations << op if @@income_assumptions.has_key
     end
-
   end
+
+  def self.assumptions
+    @@assumptions
+  end
+
   @@operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
         :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
 
-  @@income_assumptions = {revs:"Revenue", gross_profit: "Gross Profit",
+  @@assumptions = {revs:"Revenue", gross_profit: "Gross Profit",
     gross_margin: "Gross Margin", operating_profit: "Operating Profit",
     operating_margin: "Operating Margin", ebitda: "EBITDA",
     ebitda_margin: "EBITDA Margin", net_income: "Net Income", eps: "EPS",

@@ -6,7 +6,7 @@ class CashFlow < ActiveRecord::Base
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
   def operating_cash_flow(quarter, year)
-    i = company.income.id
+    i = company.income
     ebitda = i.ebitda(quarter, year)
     b = company.balance
     working_delta = b.working_capital(quarter, year) - b.working_capital(quarter, year - 1)
@@ -29,8 +29,10 @@ class CashFlow < ActiveRecord::Base
     b_id = company.balance.id
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "receivables").
-                           sort{ |a,b| a.year <=> b.year}
+                           sort{ |a,b| a.year <=> b.year}.map(&:value)
+    return 0 if results.empty?
     results[1] ||= 0
+    results[0] ||= 0
     results[1] - results[0]
   end
 
@@ -38,8 +40,10 @@ class CashFlow < ActiveRecord::Base
     b_id = company.balance.id
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "inventory").
-                           sort{ |a,b| a.year <=> b.year}
+                           sort{ |a,b| a.year <=> b.year}.map(&:value)
+    return 0 if results.empty?
     results[1] ||= 0
+    results[0] ||= 0
     results[1] - results[0]
   end
 
@@ -48,8 +52,10 @@ class CashFlow < ActiveRecord::Base
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1],
                            name: ["std", "ltd", "payables"]).
-                           sort{ |a,b| a.year <=> b.year}
+                           sort{ |a,b| a.year <=> b.year}.map(&:value)
+    return 0 if results.empty?
     results[1] ||= 0
+    results[0] ||= 0
     results[1] - results[0]
   end
 
@@ -57,8 +63,30 @@ class CashFlow < ActiveRecord::Base
     b_id = company.balance.id
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "ppe").
-                           sort{ |a,b| a.year <=> b.year}
+                           sort{ |a,b| a.year <=> b.year}.map(&:value)
+    return 0 if results.empty?
     results[1] ||= 0
+    results[0] ||= 0
     results[1] - results[0]
   end
+
+  def build_metas
+    stats = []
+    operations = []
+    list = metrics
+    @@operations_list.each do |op|
+      # operations << op if @@income_assumptions.has_key
+    end
+  end
+
+  def self.assumptions
+    @@cash_flow_assumptions
+  end
+
+  @@operations_list = [:operating_cash_flow, :free_cash_flow, :free_cash_flow_per_share,
+    :delta_receivables, :delta_inventory, :delta_liabilities, :capex]
+
+  @@cash_flow_assumptions = {depreciation:"Depreciation", investments: "Investments",
+    divs_paid: "Dividends Paid", stock_financing: "Stock Financing",
+    debt_financing: "Net Borrowings"}
 end

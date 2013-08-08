@@ -15,11 +15,15 @@
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
           </tr>
-          <% @list_assumptions.each do |item| %>
+          <% @metric_tree.each do |item, details| %>
             <tr>
-              <td><%= item[1] %></td>
+              <td><%= item %></td>
               <% @quarters.each_with_index do |q, q_i| %>
-                <td><%= @metric_tree[q[1]][q[0]][item[0]].value %></td>
+                <td><% if details[q[1]][q[0]] %>
+                      <%= details[q[1]][q[0]].value %>
+                    <% else %>
+                    0
+                    <% end %></td>
               <% end %>
             </tr>
           <% end %>
