@@ -111,4 +111,24 @@ class IncomeStatement < ActiveRecord::Base
                         name: "revs").first.value
     ebitda(quarter, year) / sales
   end
+
+  def build_metas
+    stats = []
+    operations = []
+    list = metrics
+    @@operations_list.each do |op|
+      # operations << op if @@income_assumptions.has_key
+    end
+
+  end
+  @@operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
+        :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
+
+  @@income_assumptions = {revs:"Revenue", gross_profit: "Gross Profit",
+    gross_margin: "Gross Margin", operating_profit: "Operating Profit",
+    operating_margin: "Operating Margin", ebitda: "EBITDA",
+    ebitda_margin: "EBITDA Margin", net_income: "Net Income", eps: "EPS",
+    cogs: "Cost of Goods Sold", opex: "Operating Expenses",
+    sga: "SG&A Expense", tax: "Tax Expense",
+    rd: "Research & Development"}
 end

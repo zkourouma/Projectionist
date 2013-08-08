@@ -6,6 +6,7 @@ gem 'rails', '3.2.13'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'pg'
 
 
 # Gems used only for assets and not required
@@ -37,10 +38,8 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # To use debugger
 gem 'debugger'
 gem 'scruffy'
-gem 'd3-rails'
 gem 'backbone-on-rails'
 gem 'devise'
 gem 'quiet_assets'
 gem 'better_errors'
 gem 'binding_of_caller'
-gem 'fuzzily'

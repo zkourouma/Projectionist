@@ -14,22 +14,12 @@
           <table>
             <tr>
               <th>Line item:</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th><%= "#{@quarters[0][0]}Q#{@quarters[0][1]}" %></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th><%= "#{@quarters[1][0]}Q#{@quarters[1][1]}" %></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th><%= "#{@quarters[2][0]}Q#{@quarters[2][1]}" %></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th><%= "#{@quarters[3][0]}Q#{@quarters[3][1]}" %></th>
+              <% @quarters.each_with_index do |quarter, q_i| %>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><%= "#{@quarters[q_i][0]}Q#{@quarters[q_i][1]}" %></th>
+              <% end %>
             </tr>
             <tr>
               <td><h3>Operating Activities</h3></td>

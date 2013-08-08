@@ -34,10 +34,12 @@
                 name="company[company_industries_attributes][<%= ind_i %>][id]"
                 value="<%= ind.id %>">
                 <select name="company[company_industries_attributes][<%= ind_i %>][industry_id]">
-                  <option value="<%= ind.id %>"><%= ind.name %>
+                  <option >
                   </option>
                   <% @industrials.each do |industry| %>
-                    <option value="<%= industry.id %>"><%= industry.name %></option>
+                    <option value="<%= industry.id %>"
+                      <%= 'selected' if industry.id == ind.id %>>
+                      <%= industry.name %></option>
                   <% end %>
                 </select>
               </td>
