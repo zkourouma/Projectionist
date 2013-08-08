@@ -1,0 +1,154 @@
+<html>
+  <head>
+    <title>Edit Company</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section>
+      <div class="edit-company-form">
+        <h2>Edit <%= @company.name %></h2>
+        <form action="<%= user_company_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" value="put">
+          <table>
+            <tr>
+              <td><strong>Name</strong></td>
+              <td><input name="company[name]" value="<%= @company.name %>"></td>
+            </tr>
+            <tr>
+              <td><strong>Headquarters</strong></td>
+              <td><textarea name="company[headquarters]"
+            style="vertical-align:top"><%= @company.headquarters %></textarea></td>
+            </tr>
+            <tr>
+              <td><strong># of Employees</strong></td>
+              <td><input type="number" value="<%= @company.employees %>"></td>
+            </tr>
+            <tr>
+              <td><strong>Industries</strong></td>
+              <% @industries.each_with_index do |ind, ind_i| %>
+              <td>
+                <input type="hidden"
+                name="company[company_industries_attributes][<%= ind_i %>][id]"
+                value="<%= ind.id %>">
+                <select name="company[company_industries_attributes][<%= ind_i %>][industry_id]">
+                  <option value="<%= ind.id %>"><%= ind.name %>
+                  </option>
+                  <% @industrials.each do |industry| %>
+                    <option value="<%= industry.id %>"><%= industry.name %></option>
+                  <% end %>
+                </select>
+              </td>
+            <% end %>
+            <tr>
+              <td>Add Industry</td>
+              <td>
+                <select name="company[company_industries_attributes][<%= @industrials.count + 1 %>][industry_id]">
+                  <option>
+                  </option>
+                  <% @industrials.each do |industry| %>
+                    <option value="<%= industry.id %>"><%= industry.name %></option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Assumptions</strong></td>
+            </tr>
+            <tr>
+            </tr>
+            <% @assumptions.each_with_index do |ass, ass_i| %>
+            <tr>
+              <input type="hidden"
+              name="company[assumptions_attributes][<%= ass_i %>][id]"
+              value="<%= ass.id %>">
+              <td>Metric Name</td>
+              <td>
+                <select name="company[assumptions_attributes][<%= ass_i %>][metric_name]">
+                  <option value="<%= ass.metric_name %>"><%= ass.name %></option>
+                  <% @assumes.each do |assume| %>
+                    <% next if assume.metric_name == ass.metric_name %>
+                    <option value="<%= assume.metric_name %>"><%= assume.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Metric Value</td>
+              <td><input name="company[assumptions_attributes][<%= ass_i %>][value]"
+                value="<%= ass.value %>"></td>
+            </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][assumption_type]"
+                value="growth" <%= 'checked' if ass.assumption_type == 'growth' %>>
+                Growth</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][assumption_type]"
+                value="absolute" <%= 'checked' if ass.assumption_type == 'absolute' %>>
+                Absolute</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][time_unit]"
+                value="q" <%= 'checked' if ass.time_unit == 'q' %>>Quarters</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][time_unit]"
+                value="y" <%= 'checked' if ass.time_unit == 'y' %>>Years</td>
+            </tr>
+            <tr>
+              <td>Assumption Timespan (choose "1" for growth)</td>
+              <td><input type="number"
+                name="company[assumptions_attributes][<%= ass_i %>][timespan]"
+                value="<%= ass.timespan %>"></td>
+            </tr>
+            <% end %>
+            <tr>
+              <td><strong>Add Assumption</strong></td>
+            </tr>
+            <tr>
+              <td>Metric Name</td>
+              <td>
+                <select name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][metric_name]">
+                  <option>
+                  </option>
+                  <% @assumes.each do |assume| %>
+                    <option value="<%= assume.metric_name %>"><%= assume.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Metric Value</td>
+              <td><input name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][value]"></td>
+            </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
+                value="growth">Growth</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
+                value="absolute">Absolute</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
+                value="q">Quarters</td>
+              <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
+                value="y">Years</td>
+            </tr>
+            <tr>
+              <td>Assumption Timespan (choose "1" for growth)</td>
+              <td><input type="number"
+                name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][timespan]"></td>
+            </tr>
+          </table>
+          <!-- upload company logo -->
+          <br>
+          <input type="submit" value="Update">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>
