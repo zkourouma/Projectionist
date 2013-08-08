@@ -69,10 +69,12 @@
               <td>Metric Name</td>
               <td>
                 <select name="company[assumptions_attributes][<%= ass_i %>][metric_name]">
-                  <option value="<%= ass.metric_name %>"><%= ass.name %></option>
+                  <option>
+                  </option>
                   <% @assumes.each do |assume| %>
-                    <% next if assume.metric_name == ass.metric_name %>
-                    <option value="<%= assume.metric_name %>"><%= assume.name %>
+                    <option value="<%= assume.metric_name %>"
+                      <%= 'selected' if assume.metric_name == ass.metric_name %>>
+                      <%= assume.name %>
                     </option>
                   <% end %>
                 </select>

@@ -30,6 +30,7 @@ class CashFlow < ActiveRecord::Base
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "receivables").
                            sort{ |a,b| a.year <=> b.year}
+    results[1] ||= 0
     results[1] - results[0]
   end
 
@@ -38,6 +39,7 @@ class CashFlow < ActiveRecord::Base
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "inventory").
                            sort{ |a,b| a.year <=> b.year}
+    results[1] ||= 0
     results[1] - results[0]
   end
 
@@ -47,6 +49,7 @@ class CashFlow < ActiveRecord::Base
                            year: [year, year - 1],
                            name: ["std", "ltd", "payables"]).
                            sort{ |a,b| a.year <=> b.year}
+    results[1] ||= 0
     results[1] - results[0]
   end
 
@@ -55,6 +58,7 @@ class CashFlow < ActiveRecord::Base
     results = Metric.where(statementable_id: b_id, quarter: quarter,
                            year: [year, year - 1], name: "ppe").
                            sort{ |a,b| a.year <=> b.year}
+    results[1] ||= 0
     results[1] - results[0]
   end
 end

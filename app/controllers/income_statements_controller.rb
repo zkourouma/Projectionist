@@ -35,8 +35,7 @@ class IncomeStatementsController < ApplicationController
     income_statement.metrics.each do |metric|
       list << metric.name unless list.include?(metric.name)
     end
-    list.map!{|metric| [metric,
-                        @@income_assumptions[metric.to_sym]]}
+    list.map!{|metric| [metric, @@income_assumptions[metric.to_sym]]}
   end
 
   @@income_assumptions = {revs:"Revenue", gross_profit: "Gross Profit",

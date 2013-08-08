@@ -69,6 +69,7 @@ class BalanceSheet < ActiveRecord::Base
     expend = Metric.where(statementable_id: id, year: [year, year - 1],
                           quarter: quarter, name: "ppe").sort{ |a,b| a.year <=> b.year}.
                           map(&:value)
+    expend[1] ||= 0
     expend[1] - expend[0]
   end
 
@@ -80,4 +81,26 @@ class BalanceSheet < ActiveRecord::Base
     liabilities = tot.select{|el| ["std", "payables"].include?(el.name)}.map(&:value).inject(:+)
     assets - liabilities
   end
+
+  def build_metas
+    stats = []
+    operations = []
+    list = metrics
+    @@operations_list.each do |op|
+      # operations << op if @@income_assumptions.has_key
+    end
+
+  end
+
+  @@operations_list = [:debt_to_equity, :cash_per_share, :current_ratio, :book_value,
+        :capex, :working_capital]
+
+  @@balance_assumptions = {cash:"Cash", receivables: "Accounts Receivable",
+    inventory: "Inventory", lti: "Long-Term Investments", ppe: "Property, Plant & Equipment",
+    goodwill: "Goodwill", amortization: "Amortization", payables: "Accounts Payable",
+    std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
+    common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
+    preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
+    treasury_quantity: "Treasury Shares"}
+
 end
