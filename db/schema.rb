@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807200056) do
+ActiveRecord::Schema.define(:version => 20130809173906) do
 
   create_table "assumptions", :force => true do |t|
     t.integer  "company_id"
@@ -49,10 +49,10 @@ ActiveRecord::Schema.define(:version => 20130807200056) do
   end
 
   create_table "company_industries", :force => true do |t|
-    t.string   "company_id"
-    t.string   "industry_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "company_id",  :limit => 255
+    t.integer  "industry_id", :limit => 255
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "income_statements", :force => true do |t|
