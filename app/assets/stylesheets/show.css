@@ -32,3 +32,44 @@
 .show-assumptions > ul {
   list-style:none;
 }
+
+.statement-ttm{
+  display:block;
+  float:left;
+}
+
+.income-show{
+  display:block;
+  margin: 30px auto;
+}
+.income-show > .income-content{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
+}
+
+.balance-show{
+  display:block;
+  margin: 30px auto;
+}
+
+.balance-show > .balance-content{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
+}
+
+.cash-show{
+  display:block;
+  margin: 30px auto;
+}
+
+
+.cash-show > .cash-content{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
+}

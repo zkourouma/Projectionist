@@ -27,10 +27,24 @@ class CashFlowsController < ApplicationController
     @metric_tree = build_metric_tree(@cash_flow)
     @meta_stats = @cash_flow.build_metas
     # p @meta_stats
-    p "_______________________"
-    p @metric_tree
-    p "_______________________ "
     @list_items = gen_item_list(@cash_flow)
+  end
+
+  def edit
+    @cashflow = current_user.company.cashflow
+    @metric_tree = build_metric_tree(@cashflow)
+    @year, @quarter = params[:year].to_i, params[:quarter].to_i
+    @surplus = @metric_tree.length + 1
+  end
+
+  def update
+    @cashflow = current_user.company.cashflow
+    if @income.update_attributes(params[:cashflow])
+      redirect_to user_company_cash_flow_url
+    else
+      flash.notice = "Could not update quarter"
+      redirect_to edit_user_company_cash_flow_url
+    end
   end
 
   private

@@ -27,10 +27,24 @@ class IncomeStatementsController < ApplicationController
     @metric_tree = build_metric_tree(@income)
     @meta_stats = @income.build_metas
     # p @meta_stats
-    p "_______________________"
-    p @metric_tree
-    p "_______________________ "
     @list_assumptions = gen_item_list(@income)
+  end
+
+  def edit
+    @year, @quarter = params[:year].to_i, params[:quarter].to_i
+    @income = current_user.company.income
+    @metric_tree = build_metric_tree(@income)
+    @surplus = @metric_tree.length + 1
+  end
+
+  def update
+    @income = current_user.company.income
+    if @income.update_attributes(params[:income])
+      redirect_to user_company_income_statement_url
+    else
+      flash.notice = "Could not update quarter"
+      redirect_to edit_user_company_income_statement_url
+    end
   end
 
   private

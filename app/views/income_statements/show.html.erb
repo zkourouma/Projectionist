@@ -6,6 +6,11 @@
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
     <form action="<%= new_user_project_url %>" method="post" style="float:right">
       <button type="submit" class="new-project-button">Create New Project</button></form>
+    <form action="<%= edit_user_company_income_statement_url %>" method="get" style="float:left">
+      <label>Quarter<input type="number" name="quarter"></label>
+      <label>Year<input type="number" name="year"></label>
+      <button type="submit" class="edit-button">Edit Q</button></form>
+
     <article class="income-content group">
       <div class="statement-ttm">
         <table>

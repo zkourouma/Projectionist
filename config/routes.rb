@@ -3,8 +3,6 @@ Projectionist::Application.routes.draw do
 
   root :to => 'companies#show'
 
-  match 'user_root' => 'users#show'
-    
   resource :user do
     resources :projects
     resource :company do
@@ -15,10 +13,10 @@ Projectionist::Application.routes.draw do
   end
 
 
-  
 
 
-  
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

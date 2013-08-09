@@ -1,0 +1,255 @@
+<html>
+  <head>
+    <title>Edit BS</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section class="balance-edit group">
+      <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+      <article class="edit-BS-form group">
+        <h2>Edit BS Quarter</h2><br>
+        <div class="quarter-picker group">
+          <form action="<%= edit_user_company_balance_sheet_url %>" method="get">
+            <label>
+              Quarter<input type="number" name="quarter" value="<%= @quarter %>">
+            </label>
+            <label>
+              Year<input type="number" name="year" value="<%= @year %>">
+            </label>
+            <button type="submit" class="edit-balance-button">Edit Q</button></form>
+        </div>
+        <form action="<%= user_company_balance_sheet_url %>" method="post"
+          class="group" style="float:left;">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" value="put">
+          <table>
+            <tr>
+              <th>Line item</th>
+            </tr>
+            <% @metric_tree.each_with_index do |(item, details), m_i| %>
+            <tr>
+              <% if details[@year][@quarter] %>
+                <td><%= item %></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= m_i %>][id]"
+                  value="<%= details[@year][@quarter].id %>"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= m_i %>][value]"
+                  value="<%= details[@year][@quarter].value %>"></td>
+              <% end %>
+            </tr>
+            <% end %>
+            <tr>
+              <td><h2>Add to Q</h2></td>
+            </tr>
+            <tr>
+              <td><h3>Assets</h3></td>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Cash"][@year][@quarter] %>
+                <td>Cash</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus %>][name]"
+                  value="cash"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Accounts Receivable"][@year][@quarter] %>
+                <td>Accounts Receivable</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 1 %>][name]"
+                  value="receivables"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 1 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 1 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 1 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Inventory"][@year][@quarter] %>
+                <td>Inventory</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 2 %>][name]"
+                  value="inventory"></td>
+                  <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 2 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 2 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 2 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Long-Term Investments"][@year][@quarter] %>
+                <td>Long Term Investments</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 3 %>][name]"
+                  value="lti"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 3 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 3 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 3 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Property, Plant & Equipment"][@year][@quarter] %>
+                <td>Property, Plant & Equipment</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 4 %>][name]"
+                  value="ppe"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 4 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 4 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 4 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Goodwill"][@year][@quarter] %>
+                <td>Goodwill</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 5 %>][name]"
+                  value="goodwill"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 5 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 5 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 5 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Amortization"][@year][@quarter] %>
+                <td>Amortization</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 6 %>][name]"
+                  value="amortization"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 6 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 6 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 6 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td><h3>Liabilities</h3></td>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Accounts Payable"][@year][@quarter] %>
+                <td>Accounts Payable</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 7 %>][name]"
+                  value="payables"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 7 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 7 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 7 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Short-Term Debt"][@year][@quarter] %>
+                <td>Short-term Debt</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 8 %>][name]"
+                  value="std"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 8 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 8 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 8 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Long-Term Debt"][@year][@quarter] %>
+                <td>Long-term Debt</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 9 %>][name]"
+                  value="ltd"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 9 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 9 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 9 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td><h3>Equity</h3></td>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Common Share Price"][@year][@quarter] %>
+                <td>Average Common Stock Price</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 13 %>][name]"
+                  value="common_price"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 13 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 13 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 13 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+
+            <tr>
+              <% unless @metric_tree["Common Shares"][@year][@quarter] %>
+                <td> Quantity Common Stock</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 10 %>][name]"
+                  value="common_quantity"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 10 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 10 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 10 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Preferred Share Price"][@year][@quarter] %>
+                <td>Average Preferred Stock Price</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 14 %>][name]"
+                  value="preferred_price"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 14 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 14 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 14 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+
+            <tr>
+            <tr>
+              <% unless @metric_tree["Preferred Shares"][@year][@quarter] %>
+                <td>Quantity Preferred Stock</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 11 %>][name]"
+                  value="preferred_quantity"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 11 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 11 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 11 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% unless @metric_tree["Treasury Share Price"][@year][@quarter] %>
+                <td>Average Treasury Stock Price</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 15 %>][name]"
+                  value="treasury_price"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 15 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 15 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 15 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+
+            <tr>
+            <tr>
+              <% unless @metric_tree["Treasury Shares"][@year][@quarter] %>
+                <td>Quantity Treasury Stock</td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 12 %>][name]"
+                  value="treasury_quantity"></td>
+                <td><input type="text" name="balance[metrics_attributes][<%= @surplus + 12 %>][value]"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 12 %>][quarter]"
+                  value="<%= @quarter %>"></td>
+                <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 12 %>][year]"
+                  value="<%= @year %>"></td>
+              <% end %>
+            </tr>
+          </table>
+          <input type="submit" value="Update">
+        </form>
+      </article>
+      <br><%= link_to "Back", :back %>
+    </section>
+  </body>
+</html>

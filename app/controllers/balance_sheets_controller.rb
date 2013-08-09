@@ -30,6 +30,23 @@ class BalanceSheetsController < ApplicationController
     @list_assumptions = gen_assumption_list(@balance)
   end
 
+  def edit
+    @balance = current_user.company.balance
+    @metric_tree = build_metric_tree(@balance)
+    @year, @quarter = params[:year].to_i, params[:quarter].to_i
+    @surplus = @metric_tree.length + 1
+  end
+
+  def update
+    @balance = current_user.company.balance
+    if @income.update_attributes(params[:balance])
+      redirect_to user_company_balance_sheet_url
+    else
+      flash.notice = "Could not update quarter"
+      redirect_to edit_user_company_balance_sheet_url
+    end
+  end
+
   private
   def gen_assumption_list(balance_sheet)
     list = []
