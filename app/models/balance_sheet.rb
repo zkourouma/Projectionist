@@ -52,9 +52,11 @@ class BalanceSheet < ActiveRecord::Base
                                "depreciation", "payables", "std", "ltd"])
     assets = tot.select{|el| ["cash", "receivables", "lti", "inventory", "ppe"].
                                 include?(el.name)}.map(&:value).inject(:+)
+    assets ||= 0
     assets -= tot.find{|el| el.name == "depreciation"}.value
     liabilities = tot.select{|el| ["payables", "std", "ltd"].
                                 include?(el.name)}.map(&:value).inject(:+)
+    liabilities ||= 0
     assets - liabilities
   end
 
@@ -114,14 +116,6 @@ class BalanceSheet < ActiveRecord::Base
     std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
     common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
     preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
-    treasury_quantity: "Treasury Shares", depreciation:"Depreciation",
-    investments: "Investments", divs_paid: "Dividends Paid", stock_financing: "Stock Financing",
-    debt_financing: "Net Borrowings", revs:"Revenue", gross_profit: "Gross Profit",
-    gross_margin: "Gross Margin", operating_profit: "Operating Profit",
-    operating_margin: "Operating Margin", ebitda: "EBITDA",
-    ebitda_margin: "EBITDA Margin", net_income: "Net Income", eps: "EPS",
-    cogs: "Cost of Goods Sold", opex: "Operating Expenses",
-    sga: "SG&A Expense", tax: "Tax Expense",
-    rd: "Research & Development"}
+    treasury_quantity: "Treasury Shares"}
 
 end

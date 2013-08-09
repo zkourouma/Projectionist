@@ -13,7 +13,7 @@
           <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
           <table>
             <tr>
-              <th>Line item:</th>
+              <th>Line item</th>
               <% @quarters.each_with_index do |quarter, q_i| %>
                 <th></th>
                 <th></th>
@@ -25,7 +25,7 @@
               <td><h3>Operating Activities</h3></td>
             </tr>
             <tr>
-              <td>Depreciation:</td>
+              <td>Depreciation</td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
                   value="depreciation"></td>
@@ -33,15 +33,14 @@
                   value="<%= q[0] %>"></td>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][year]"
                   value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"
-                  value=""></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
               <% end %>
             </tr>
             <tr>
               <td><h3>Investing Activities</h3></td>
             </tr>
             <tr>
-              <td>Investments:</td>
+              <td>Investments</td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 5 %>][name]"
                   value="investments"></td>
@@ -56,7 +55,7 @@
               <td><h3>Financing</h3></td>
             </tr>
             <tr>
-              <td>Dividends Paid:</td>
+              <td>Dividends Paid</td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 6 %>][name]"
                   value="divs_paid"></td>
@@ -68,7 +67,7 @@
               <% end %>
             </tr>
             <tr>
-              <td>Stock Financing:</td>
+              <td>Stock Financing</td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 7 %>][name]"
                   value="stock_financing"></td>
@@ -80,7 +79,7 @@
               <% end %>
             </tr>
             <tr>
-              <td>Debt Financing:</td>
+              <td>Debt Financing</td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 8 %>][name]"
                   value="debt_financing"></td>

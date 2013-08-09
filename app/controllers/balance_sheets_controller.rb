@@ -47,6 +47,24 @@ class BalanceSheetsController < ApplicationController
     end
   end
 
+  def add
+    render :add
+  end
+
+  def add_year
+    @balance = current_user.company.balance
+    params[:balance][:metrics_attributes].each do |metric, value|
+      value[:year] = params[:set_year].to_i
+    end
+    if @balance.update_attributes(params[:balance])
+      redirect_to user_company_balance_sheet_url
+    else
+      flash.notice = "Something went wrong"
+      render :add
+    end
+  end
+
+
   private
   def gen_assumption_list(balance_sheet)
     list = []

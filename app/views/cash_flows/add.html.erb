@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title>Add CF</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section class="cash-edit group">
+      <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+      <div class="edit-CF-form group">
+        <h2>Add to Cash Flow</h2><br>
+        <form action="<%= add_year_user_company_cash_flow_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <td><label>Year<input type="text" name="set_year"></label></td>
+            </tr>
+            <tr>
+              <th>Line item:</th>
+              <% 4.times do |i| %>
+                <th></th>
+                <th></th>
+                <th><%= "#{i + 1}Q" %></th>
+              <% end %>
+            </tr>
+            <tr>
+              <td><h3>Operating Activities</h3></td>
+            </tr>
+            <tr>
+              <td>Depreciation</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i %>][name]"
+                  value="depreciation"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i %>][quarter]"
+                  value="<%= i %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= i %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td><h3>Investing Activities</h3></td>
+            </tr>
+            <tr>
+              <td>Investments</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 5 %>][name]"
+                  value="investments"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 5 %>][quarter]"
+                  value="<%= i %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= i + 5 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td><h3>Financing</h3></td>
+            </tr>
+            <tr>
+              <td>Dividends Paid</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 6 %>][name]"
+                  value="divs_paid"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 6 %>][quarter]"
+                  value="<%= i %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= i + 6 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Stock Financing</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 7 %>][name]"
+                  value="stock_financing"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 7 %>][quarter]"
+                  value="<%= i %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= i + 7 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Debt Financing</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 8 %>][name]"
+                  value="debt_financing"></td>
+                <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + 8 %>][quarter]"
+                  value="<%= i %>"></td>
+                <td><input type="text" name="cashflow[metrics_attributes][<%= i + 8 %>][value]"></td>
+              <% end %>
+            </tr>
+          </table>
+          <input type="submit" value="Add">
+        </form>
+      </div>
+      <br><%= link_to "Back", :back %>
+    </section>
+  </body>
+</html>

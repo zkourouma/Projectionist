@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Add IS</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section class="income-edit group">
+      <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+      <div class="edit-IS-form group">
+        <h2>Add to Income Statement</h2><br>
+        <form action="<%= add_year_user_company_income_statement_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <td><label>Year<input type="text" name="set_year"></label></td>
+            </tr>
+            <tr>
+              <th>Line item:</th>
+              <% 4.times do |i| %>
+                <th></th>
+                <th></th>
+                <th><%= "#{i + 1}Q" %></th>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Revenue</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i %>][name]"
+                  value="revs"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i %>][value]"></td>
+
+              <% end %>
+            </tr>
+            <tr>
+              <td>Cost of Goods Sold</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 1 %>][name]"
+                  value="cogs"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 1 %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i + 1 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Research & Development</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 3 %>][name]"
+                  value="rd"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 3 %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i + 3 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>SG&A Expense</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 4 %>][name]"
+                  value="sga"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 4 %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i + 4 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Interest Expense</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 5 %>][name]"
+                  value="interest"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 5 %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i + 5 %>][value]"></td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Income Tax</td>
+              <% 4.times do |i| %>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 6 %>][name]"
+                  value="tax"></td>
+                <td><input type="hidden" name="income[metrics_attributes][<%= i + 6 %>][quarter]"
+                  value="<%= i + 1 %>"></td>
+                <td><input type="text" name="income[metrics_attributes][<%= i + 6 %>][value]"></td>
+              <% end %>
+            </tr>
+          </table>
+          <input type="submit" value="Add Year">
+        </form>
+      </div>
+      <br><%= link_to "Back", :back %>
+    </section>
+  </body>
+</html>

@@ -29,6 +29,9 @@ class IncomeStatement < ActiveRecord::Base
                           name: "depreciation").map(&:value).inject(:+)
     amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
                           name: "amortization").map(&:value).inject(:+)
+    cogs ||= 0
+    dep ||= 0
+    amor ||= 0
     gross_profit(quarter, year) - opex(quarter, year) -
       cogs - dep - amor
   end
@@ -46,6 +49,9 @@ class IncomeStatement < ActiveRecord::Base
                           name: "depreciation").map(&:value).inject(:+)
     amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
                           name: "amortization").map(&:value).inject(:+)
+    eb ||= 0
+    dep ||= 0
+    amor ||= 0
     eb + dep + amor
   end
 
@@ -82,6 +88,8 @@ class IncomeStatement < ActiveRecord::Base
               GROUP BY m.name
               SQL
     shares = ActiveRecord::Base.connection.execute(query).first
+    return 0 unless shares['value']
+    earn ||= 0
     earn / shares['value']
   end
 
@@ -99,18 +107,21 @@ class IncomeStatement < ActiveRecord::Base
   def gross_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
                         name: "revs").map(&:value).inject(:+)
+    return 0 unless sales
     gross_profit(quarter, year) / sales
   end
 
   def operating_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
                         name: "revs").map(&:value).inject(:+)
+    return 0 unless sales
     operating_profit(quarter, year) / sales
   end
 
   def ebitda_margin(quarter, year)
     sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
                         name: "revs").map(&:value).inject(:+)
+    return 0 unless sales
     ebitda(quarter, year) / sales
   end
 

@@ -182,7 +182,7 @@
                 <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 13 %>][year]"
                   value="<%= @year %>"></td>
               <% end %>
-
+            </tr>
             <tr>
               <% unless @metric_tree["Common Shares"][@year][@quarter] %>
                 <td> Quantity Common Stock</td>
@@ -206,8 +206,7 @@
                 <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 14 %>][year]"
                   value="<%= @year %>"></td>
               <% end %>
-
-            <tr>
+            </tr>
             <tr>
               <% unless @metric_tree["Preferred Shares"][@year][@quarter] %>
                 <td>Quantity Preferred Stock</td>
@@ -231,8 +230,7 @@
                 <td><input type="hidden" name="balance[metrics_attributes][<%= @surplus + 15 %>][year]"
                   value="<%= @year %>"></td>
               <% end %>
-
-            <tr>
+            </tr>
             <tr>
               <% unless @metric_tree["Treasury Shares"][@year][@quarter] %>
                 <td>Quantity Treasury Stock</td>

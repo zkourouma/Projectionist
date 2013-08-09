@@ -47,6 +47,23 @@ class IncomeStatementsController < ApplicationController
     end
   end
 
+  def add
+    render :add
+  end
+
+  def add_year
+    @income = current_user.company.income
+    params[:income][:metrics_attributes].each do |metric, value|
+      value[:year] = params[:set_year].to_i
+    end
+    if @income.update_attributes(params[:income])
+      redirect_to user_company_income_statement_url
+    else
+      flash.notice = "Something went wrong"
+      render :add
+    end
+  end
+
   private
   def gen_item_list(income_statement)
     list = []

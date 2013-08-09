@@ -6,9 +6,18 @@ Projectionist::Application.routes.draw do
   resource :user do
     resources :projects
     resource :company do
-      resource :income_statement
-      resource :balance_sheet
-      resource :cash_flow
+      resource :income_statement do
+        get '/add' => 'income_statements#add', as: 'add'
+        post '/add_year' => 'income_statements#add_year', as: 'add_year'
+      end
+      resource :balance_sheet do
+        get '/add' => 'balance_sheets#add', as: 'add'
+        post '/add_year' => 'balance_sheets#add_year', as: 'add_year'
+      end
+      resource :cash_flow do
+        get '/add' => 'cash_flows#add', as: 'add'
+        post '/add_year' => 'cash_flows#add_year', as: 'add_year'
+      end
     end
   end
 

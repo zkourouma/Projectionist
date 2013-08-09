@@ -47,6 +47,24 @@ class CashFlowsController < ApplicationController
     end
   end
 
+  def add
+    render :add
+  end
+
+  def add_year
+    @cashflow = current_user.company.cashflow
+    params[:cashflow][:metrics_attributes].each do |metric, value|
+      value[:year] = params[:set_year].to_i
+    end
+    if @cashflow.update_attributes(params[:cashflow])
+      redirect_to user_company_cash_flow_url
+    else
+      flash.notice = "Something went wrong"
+      render :add
+    end
+  end
+
+
   private
   def gen_item_list(cash_flow)
     list = []
