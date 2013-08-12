@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130809175318) do
+ActiveRecord::Schema.define(:version => 20130812135451) do
 
   create_table "assumptions", :force => true do |t|
     t.integer  "company_id"
@@ -74,9 +74,10 @@ ActiveRecord::Schema.define(:version => 20130809175318) do
     t.integer  "year"
     t.float    "value"
     t.integer  "statementable_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "statementable_type"
+    t.boolean  "forward",            :default => false
   end
 
   add_index "metrics", ["statementable_id"], :name => "index_metrics_on_statement_id"

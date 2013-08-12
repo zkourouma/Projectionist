@@ -19,14 +19,19 @@ class IncomeStatementsController < ApplicationController
   def show
     @user = current_user
     @quarters = new_quarter
+    p @quarters
     @company = current_user.company
     @assumptions = @company.assumptions.select do |ass|
-      IncomeStatement.assumptions.has_key?(ass.metric_name.to_sym)
+      IncomeStatement.relevant.has_key?(ass.metric_name.to_sym)
     end
     @income = @company.income
-    @metric_tree = build_metric_tree(@income)
-    @meta_stats = @income.build_metas
-    # p @meta_stats
+    @metric_tree = build_metric_tree(@company)
+    forecaster = forecast(@metric_tree)
+    @metric_tree.each do |metric, years|
+      years.each do |year, quarters|
+        quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}
+      end
+    end
     @list_assumptions = gen_item_list(@income)
   end
 
@@ -70,7 +75,7 @@ class IncomeStatementsController < ApplicationController
     income_statement.metrics.each do |metric|
       list << metric.name unless list.include?(metric.name)
     end
-    list.map!{|metric| [metric, IncomeStatement.assumptions[metric.to_sym]]}
+    list.map!{|metric| [metric, IncomeStatement.relevant[metric.to_sym]]}
   end
 
 end

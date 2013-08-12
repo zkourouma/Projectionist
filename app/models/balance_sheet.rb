@@ -5,117 +5,126 @@ class BalanceSheet < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
-  def debt_to_equity(quarter, year)
-    tot = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                       name: ["std", "ltd", "common_quantity", "treasury_quantity", "preferred_quantity", "common_price", "treasury_price", "preferred_price"])
-    debt = tot.select{ |el| ["std", "ltd"].include?(el.name)}.map(&:value).inject(:+)
-    equity_q = tot.select{ |el| ["common_quantity", "preferred_quantity", "treasury_quantity"].include?(el.name)}
-    equity_v = tot.select{ |el| ["common_price", "preferred_price", "treasury_price"].include?(el.name)}
+  def debt_to_equity(tree, quarter, year)
+    std = sanitize(tree, "Short-Term Debt", year, quarter)
+    ltd = sanitize(tree, "Long-Term Debt", year, quarter)
+    
+    commons = sanitize(tree, "Common Shares", year, quarter)
+    common_p = sanitize(tree, "Common Share Price", year,quarter)
+    
+    treasuries = sanitize(tree, "Treasury Shares", year, quarter)
+    treasury_p = sanitize(tree, "Treasury Share Price", year, quarter)
+    
+    preferreds = sanitize(tree, "Preferred Shares", year, quarter)
+    preferred_p = sanitize(tree, "Preferred Share Price", year, quarter)
+
+    debt = std + ltd
+    c = commons * common_p
+    t = treasuries * treasury_p
+    p = preferreds * preferred_p
+    equity_q = {commons: c, treasuries: t, preferreds: p}
     equity_t = 0
-    equity_q.each do |quantity|
-      equity_v.each do |value|
-        if quantity.name[0,3] == value.name[0,3]
-          equity_t += (quantity.value.to_f * value.value.to_f)
-        end
-      end
+    equity_q.each do |name, value|
+      equity_t += value
     end
-    return 0 unless debt && (equity_t != 0)
-    debt.to_f / equity_t
+    return 0 if equity_t == 0
+    debt / equity_t
   end
 
-  def cash_per_share(quarter, year)
-    cashare = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                            name: ["cash", "treasury_quantity", "preferred_quantity", "common_quantity"])
-    cash = cashare.find{|el| el.name = "cash"}
-    shares = cashare.select{|el| el.name != "cash"}.map(&:value).inject(:+)
-    return 0 unless cash && shares && (shares != 0)
-    cash.value.to_f / shares.to_f
+  def cash_per_share(tree, quarter, year)
+    commons = sanitize(tree, "Common Shares", year, quarter)
+    treasuries = sanitize(tree, "Treasury Shares", year, quarter)
+    preferreds = sanitize(tree, "Preferred Shares", year, quarter)
+    shares = commons + preferreds + treasuries
+
+    cash = sanitize(tree, "Cash", year, quarter)
+    
+    return 0 if shares == 0
+    cash / shares
   end
 
-  def current_ratio(quarter, year)
-    tot = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: ["cash", "receivables", "inventory",
-                                "std", "payables"])
-    assets = tot.select{|el| ["cash", "receivables", "inventory"].include?(el.name)}.map(&:value).inject(:+)
-    liabilities = tot.select{|el| ["std", "payables"].include?(el.name)}.map(&:value).inject(:+)
-    return 0 unless assets && liabilities
-    if liabilities
-      assets.to_f / liabilities.to_f
+  def current_ratio(tree, quarter, year)
+    cash = sanitize(tree, "Cash", year, quarter)
+    receive = sanitize(tree, "Accounts Receivable", year, quarter)
+    inven = sanitize(tree, "Inventory", year, quarter)
+    assets = cash + receive + inven
+    
+    debt = sanitize(tree, "Short-Term Debt", year, quarter)
+    pay = sanitize(tree, "Accounts Payable", year, quarter)
+    liabilities = debt + pay
+    
+    return 0 if liabilities == 0
+    assets / liabilities
+  end
+
+  def book_value(tree, quarter, year)
+    cash = sanitize(tree, "Cash", year, quarter)
+    receive = sanitize(tree, "Accounts Receivable", year, quarter)
+    inven = sanitize(tree, "Inventory", year, quarter)
+    lti = sanitize(tree, "Long-Term Investments", year, quarter)
+    ppe = sanitize(tree, "Property, Plant & Equipment", year, quarter)
+    assets = cash + receive + inven + lti + ppe
+
+    dep = sanitize(tree, "Depreciation", year, quarter)
+    assets -= dep
+    
+    std = sanitize(tree, "Short-Term Debt", year, quarter)
+    ltd = sanitize(tree, "Long-Term Debt", year, quarter)
+    pay = sanitize(tree, "Accounts Payable", year, quarter)
+    liabilities = std + ltd + pay
+    
+    assets - liabilities
+  end
+
+  def book_value_per_share(tree, quarter, year)
+    val = book_value(tree, quarter,year)
+    commons = sanitize(tree, "Common Shares", year, quarter)
+    treasuries = sanitize(tree, "Treasury Shares", year, quarter)
+    preferreds = sanitize(tree, "Preferred Shares", year, quarter)
+    shares = commons + treasuries + preferreds
+    return 0 if shares == 0
+    val / shares
+  end
+
+  def capex(tree, quarter, year)
+    this = sanitize(tree, "Property, Plant & Equipment", year, quarter)
+    that = sanitize(tree, "Property, Plant & Equipment", year-1, quarter)
+    this - that
+  end
+
+  def working_capital(tree, quarter, year)
+    cash = sanitize(tree, "Cash", year, quarter)
+    receive = sanitize(tree, "Accounts Receivable", year, quarter)
+    inven = sanitize(tree, "Inventory", year, quarter)
+    assets = cash + receive + inven
+    
+    debt = sanitize(tree, "Short-Term Debt", year, quarter)
+    pay = sanitize(tree, "Accounts Payable", year, quarter)
+    liabilities = debt + pay
+
+    assets - liabilities
+  end
+
+  def self.relevant
+    @@relevant
+  end
+
+  def sanitize(tree, name, year, quarter)
+    if tree[name][year][quarter]
+      tree[name][year][quarter].value
     else
       0
     end
   end
 
-  def book_value(quarter, year)
-    tot = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                       name: ["cash", "receivables", "lti", "inventory", "ppe",
-                               "depreciation", "payables", "std", "ltd"])
-    assets = tot.select{|el| ["cash", "receivables", "lti", "inventory", "ppe"].
-                                include?(el.name)}.map(&:value).inject(:+)
-    assets ||= 0
-    assets -= tot.find{|el| el.name == "depreciation"}.value
-    liabilities = tot.select{|el| ["payables", "std", "ltd"].
-                                include?(el.name)}.map(&:value).inject(:+)
-    liabilities ||= 0
-    assets - liabilities
-  end
-
-  def book_value_per_share(quarter, year)
-    val = book_value(quarter,year)
-    shares = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                          name: ["common_quantity", "treasury_quantity", "preferred_quantity"])
-    shares = shares.map(&:value).inject(:+)
-
-    return 0 unless val
-    shares ||= 0.0001
-    val.to_f / shares
-  end
-
-  def capex(quarter, year)
-    expend = Metric.where(statementable_id: id, year: [year, year - 1],
-                          quarter: quarter, name: "ppe").sort{ |a,b| a.year <=> b.year}.
-                          map(&:value)
-    return 0 if expend.empty?
-    expend[1] ||= 0
-    expend[0] ||= 0
-    expend[1] - expend[0]
-  end
-
-  def working_capital(quarter, year)
-    tot = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: ["cash", "receivables", "inventory",
-                                "std", "payables"])
-    assets = tot.select{|el| ["cash", "receivables", "inventory"].include?(el.name)}.map(&:value).inject(:+)
-    liabilities = tot.select{|el| ["std", "payables"].include?(el.name)}.map(&:value).inject(:+)
-    return 0 if tot.empty?
-    assets ||= 0
-    liabilities ||= 0
-    assets - liabilities
-  end
-
-  def build_metas
-    stats = []
-    operations = []
-    list = metrics
-    @@operations_list.each do |op|
-      # operations << op if @@income_assumptions.has_key
-    end
-
-  end
-
-  def assumptions
-    @@assumptions
-  end
-
   @@operations_list = [:debt_to_equity, :cash_per_share, :current_ratio, :book_value,
         :capex, :working_capital]
 
-  @@assumptions = {cash:"Cash", receivables: "Accounts Receivable",
+  @@relevant = {cash:"Cash", receivables: "Accounts Receivable",
     inventory: "Inventory", lti: "Long-Term Investments", ppe: "Property, Plant & Equipment",
     goodwill: "Goodwill", amortization: "Amortization", payables: "Accounts Payable",
     std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
     common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
     preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
     treasury_quantity: "Treasury Shares"}
-
 end

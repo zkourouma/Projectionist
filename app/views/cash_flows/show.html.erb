@@ -23,11 +23,12 @@
             <% end %>
           </tr>
           <% @metric_tree.each do |item, details| %>
+            <% next unless CashFlow.relevant.has_value?(item) %>
             <tr>
               <td><%= item %></td>
               <% @quarters.each_with_index do |q, q_i| %>
                 <td><% if details[q[1]][q[0]] %>
-                      <%= details[q[1]][q[0]].value %>
+                      <%= details[q[1]][q[0]].value.round(1) %>
                     <% else %>
                     0
                     <% end %></td>
@@ -47,37 +48,37 @@
           <tr>
             <td>Operating Cash Flow</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.operating_cash_flow(q[0], q[1]) %></td>
+              <td><%= @cash_flow.operating_cash_flow(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Free Cash Flow</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.free_cash_flow(q[0], q[1]) %></td>
+              <td><%= @cash_flow.free_cash_flow(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Chg in Accts Receivable</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.delta_receivables(q[0], q[1]) %></td>
+              <td><%= @cash_flow.delta_receivables(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Chg in Inventory</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.delta_inventory(q[0], q[1]) %></td>
+              <td><%= @cash_flow.delta_inventory(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Chg in Liabilities</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.delta_liabilities(q[0], q[1]) %></td>
+              <td><%= @cash_flow.delta_liabilities(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Capital Expenditure</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @cash_flow.capex(q[0], q[1]) %></td>
+              <td><%= @cash_flow.capex(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
         </table>

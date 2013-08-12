@@ -21,12 +21,16 @@ class CashFlowsController < ApplicationController
     @quarters = new_quarter
     @company = current_user.company
     @assumptions = @company.assumptions.select do |ass|
-      CashFlow.assumptions.has_key?(ass.metric_name.to_sym)
+      CashFlow.relevant.has_key?(ass.metric_name.to_sym)
     end
     @cash_flow = @company.cashflow
-    @metric_tree = build_metric_tree(@cash_flow)
-    @meta_stats = @cash_flow.build_metas
-    # p @meta_stats
+    @metric_tree = build_metric_tree(@company)
+    forecaster = forecast(@metric_tree)
+    @metric_tree.each do |metric, years|
+      years.each do |year, quarters|
+        quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}
+      end
+    end
     @list_items = gen_item_list(@cash_flow)
   end
 
@@ -71,6 +75,6 @@ class CashFlowsController < ApplicationController
     cash_flow.metrics.each do |metric|
       list << metric.name unless list.include?(metric.name)
     end
-    list.map!{|metric| [metric, CashFlow.assumptions[metric.to_sym]]}
+    list.map!{|metric| [metric, CashFlow.relevant[metric.to_sym]]}
   end
 end

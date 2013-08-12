@@ -5,65 +5,49 @@ class IncomeStatement < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
-  def gross_profit(quarter, year)
-    results = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                            name:["revs", "cogs"])
-    revs = results.select{ |e| e.name == "revs" }.map(&:value).inject(:+)
-    cogs = results.select{ |e| e.name == "cogs" }.map(&:value).inject(:+)
-    revs ||= 0
-    cogs ||= 0
+  def gross_profit(tree, quarter, year)
+    revs = sanitize(tree, "Revenue", year, quarter)
+    cogs = sanitize(tree, "Cost of Goods Sold", year, quarter)
     revs - cogs
   end
 
-  def yoy_gross_profit_delta(quarter, year)
-    prev, cur = gross_profit(quarter, year-1), gross_profit(quarter, year)
+  def yoy_gross_profit_delta(tree, quarter, year)
+    prev, cur = gross_profit(tree, quarter, year-1), gross_profit(tree, quarter, year)
     {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
-  def operating_profit(quarter, year)
+  def operating_profit(tree, quarter, year)
     cf_id = company.cashflow.id
     b_id = company.balance.id
-    cogs = Metric.where(statementable_id: id, quarter: quarter, year: year,
-                          name: "cogs").map(&:value).inject(:+)
-    dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
-                          name: "depreciation").map(&:value).inject(:+)
-    amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
-                          name: "amortization").map(&:value).inject(:+)
-    cogs ||= 0
-    dep ||= 0
-    amor ||= 0
-    gross_profit(quarter, year) - opex(quarter, year) -
-      cogs - dep - amor
+    dep = sanitize(tree, "Depreciation", year, quarter)
+    amor = sanitize(tree, "Amortization", year, quarter)
+    gross_profit(tree, quarter, year) - opex(tree, quarter, year) -
+      dep - amor
   end
 
   def yoy_operating_profit_delta(quarter, year)
-    prev, cur = operating_profit(quarter, year-1), operating_profit(quarter, year)
+    prev, cur = operating_profit(tree, quarter, year-1), operating_profit(tree, quarter, year)
     {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
-  def ebitda(quarter, year)
-    eb = operating_profit(quarter, year)
-    cf_id = company.cashflow.id
-    b_id = company.balance.id
-    dep = Metric.where(statementable_id: cf_id, quarter: quarter, year: year,
-                          name: "depreciation").map(&:value).inject(:+)
-    amor = Metric.where(statementable_id: b_id, quarter: quarter, year: year,
-                          name: "amortization").map(&:value).inject(:+)
-    eb ||= 0
-    dep ||= 0
-    amor ||= 0
+  def ebitda(tree, quarter, year)
+    eb = operating_profit(tree, quarter, year)
+    cf_id, b_id = company.cashflow.id, company.balance.id
+    dep = sanitize(tree, "Depreciation", year, quarter)
+    amor = sanitize(tree, "Amortization", year, quarter)
+
     eb + dep + amor
   end
 
   def yoy_ebitda_delta(quarter, year)
-    prev, cur = ebitda(quarter, year-1), ebitda(quarter, year)
+    prev, cur = ebitda(tree, quarter, year-1), ebitda(tree, quarter, year)
     {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
-  def net_income(quarter, year)
-    net = operating_profit(quarter, year).to_f
-    logist = Metric.where(statementable_id: id, year: year, quarter: quarter, name: ["tax", "interest"])
-    logist.each{|el| net -= el.value}
+  def net_income(tree, quarter, year)
+    net = operating_profit(tree, quarter, year)
+    net -= sanitize(tree, "Tax Expense", year, quarter)
+    net -= sanitize(tree, "Interest Expense", year, quarter)
     net
   end
 
@@ -72,76 +56,62 @@ class IncomeStatement < ActiveRecord::Base
     {absolute: (cur - prev), percent: ((cur - prev).to_f / prev) }
   end
 
-  def eps(quarter, year)
-    earn = net_income(quarter, year)
-    query = <<-SQL
-              SELECT SUM(m.value) as value
-              FROM companies c
-              JOIN balance_sheets b
-              ON c.id = b.company_id
-              JOIN metrics m
-              ON b.id = m.statementable_id
-              WHERE c.id = "#{company.id}"
-              AND year = "#{year}"
-              AND quarter = "#{quarter}"
-              AND m.name IN ("treasury_quantity", "common_quantity", "preferred_quantity")
-              GROUP BY m.name
-              SQL
-    shares = ActiveRecord::Base.connection.execute(query).first
-    return 0 unless shares['value']
-    earn ||= 0
-    earn / shares['value']
+  def eps(tree, quarter, year)
+    earn = net_income(tree, quarter, year)
+    commons = sanitize(tree, "Common Shares", year, quarter)
+    treasuries = sanitize(tree, "Treasury Shares", year, quarter)
+    preferreds = sanitize(tree, "Preferred Shares", year, quarter)
+    shares = commons + preferreds + treasuries
+
+    return 0 if shares == 0
+    earn / shares
   end
 
-  def yoy_eps_delta(quarter, year)
-    cur, prev = eps(quarter, year), eps(quarter, year-1)
+  def yoy_eps_delta(tree, quarter, year)
+    cur, prev = eps(tree, quarter, year), eps(tree, quarter, year-1)
     {absolute: (cur - prev), percent: ((cur-prev).to_f / prev)}
   end
 
-  def opex(quarter, year)
-    Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: ["sga", "rd"]).
-                        map(&:value).inject(:+)
+  def opex(tree, quarter, year)
+    sga = sanitize(tree, "SG&A Expense", year, quarter)
+    rd = sanitize(tree, "Research & Development", year, quarter)
+    sga + rd
   end
 
-  def gross_margin(quarter, year)
-    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").map(&:value).inject(:+)
+  def gross_margin(tree, quarter, year)
+    sales = sanitize(tree, "Revenue", year, quarter)
     return 0 unless sales
-    gross_profit(quarter, year) / sales
+    gross_profit(tree, quarter, year) / sales
   end
 
-  def operating_margin(quarter, year)
-    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").map(&:value).inject(:+)
+  def operating_margin(tree, quarter, year)
+    sales = sanitize(tree, "Revenue", year, quarter)
     return 0 unless sales
-    operating_profit(quarter, year) / sales
+    operating_profit(tree, quarter, year) / sales
   end
 
-  def ebitda_margin(quarter, year)
-    sales = Metric.where(statementable_id: id, year: year, quarter: quarter,
-                        name: "revs").map(&:value).inject(:+)
-    return 0 unless sales
-    ebitda(quarter, year) / sales
+  def ebitda_margin(tree, quarter, year)
+    sales = sanitize(tree, "Revenue", year, quarter)
+    return 0 if sales == 0
+    ebitda(tree, quarter, year) / sales
   end
 
-  def build_metas
-    stats = []
-    operations = []
-    list = metrics
-    @@operations_list.each do |op|
-      # operations << op if @@income_assumptions.has_key
+  def sanitize(tree, name, year, quarter)
+    if tree[name][year][quarter]
+      tree[name][year][quarter].value
+    else
+      0
     end
   end
 
-  def self.assumptions
-    @@assumptions
+  def self.relevant
+    @@relevant
   end
 
   @@operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
         :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
 
-  @@assumptions = {revs:"Revenue", gross_profit: "Gross Profit",
+  @@relevant = {revs:"Revenue", gross_profit: "Gross Profit",
     gross_margin: "Gross Margin", operating_profit: "Operating Profit",
     operating_margin: "Operating Margin", ebitda: "EBITDA",
     ebitda_margin: "EBITDA Margin", net_income: "Net Income", eps: "EPS",

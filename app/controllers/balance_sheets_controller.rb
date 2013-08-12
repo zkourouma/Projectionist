@@ -21,12 +21,16 @@ class BalanceSheetsController < ApplicationController
     @quarters = new_quarter
     @company = current_user.company
     @assumptions = @company.assumptions.select do |ass|
-      @@balance_assumptions.has_key?(ass.metric_name.to_sym)
+      BalanceSheet.relevant.has_key?(ass.metric_name.to_sym)
     end
     @balance = @company.balance
-    @metric_tree = build_metric_tree(@balance)
-    @meta_stats = @balance.build_metas
-    # p @meta_stats
+    @metric_tree = build_metric_tree(@company)
+    forecaster = forecast(@metric_tree)
+    @metric_tree.each do |metric, years|
+      years.each do |year, quarters|
+        quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}
+      end
+    end
     @list_assumptions = gen_assumption_list(@balance)
   end
 
@@ -71,14 +75,6 @@ class BalanceSheetsController < ApplicationController
     balance_sheet.metrics.each do |metric|
       list << metric.name unless list.include?(metric.name)
     end
-    list.map!{|metric| [metric, @@balance_assumptions[metric.to_sym]]}
+    list.map!{|metric| [metric, BalanceSheet.relevant[metric.to_sym]]}
   end
-
-  @@balance_assumptions = {cash:"Cash", receivables: "Accounts Receivable",
-    inventory: "Inventory", lti: "Long-Term Investments", ppe: "Property, Plant & Equipment",
-    goodwill: "Goodwill", amortization: "Amortization", payables: "Accounts Payable",
-    std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
-    common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
-    preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
-    treasury_quantity: "Treasury Shares"}
 end
