@@ -52,7 +52,14 @@ class ProjectsController < ApplicationController
     @assumptions = @project.assumptions
     @metrics = @project.metrics
     @start_time = new_quarter.first
+    @data = hashify(@metrics)
     @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
+  end
+
+  def hashify(array)
+    data = Hash.new
+    array.each{|m| data[m.display_name] = m.value}
+    data
   end
 
   @@assumption_list = ["revs", "cogs", "rd","sga", "interest", "tax", "cash",
