@@ -4,3 +4,19 @@
 .new-IS-form{
   width: 800px;
 }
+
+.new-BS-form{
+  width: 800px;
+}
+
+.new-CF-form{
+  width: 800px;
+}
+
+.new-project-form{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
+}
+}

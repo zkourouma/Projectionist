@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>New Project</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section class="group">
+      <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+      <div class="new-project-form group">
+        <h2>New Project</h2>
+        <form action="<%= user_projects_url %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <table>
+            <tr>
+              <td><strong>Name</strong></td>
+              <td><input name="project[name]"></td>
+            </tr>
+            <tr>
+              <td><h3>Baseline Metrics</h3></td>
+            </tr>
+            <% @list.each_with_index do |item, i| %>
+              <tr>
+                <td><%= item.name %></td>
+                <input type="hidden" name="project[metrics_attributes][<%= i %>][name]"
+                value="<%= item.metric_name %>">
+                <td><input type="text" name="project[metrics_attributes][<%= i %>][value]"></td>
+              </tr>
+                <input type="hidden" name="project[metrics_attributes][<%= i %>][year]"
+                value="[<%= @start_time[1] %>">
+                <input type="hidden" name="project[metrics_attributes][<%= i %>][quarter]"
+                value="[<%= @start_time[0] %>">
+            <% end %>
+            <tr>
+              <td><strong>Assumptions</strong></td>
+            </tr>
+            <tr>
+            </tr>
+            <% 3.times do |i| %>
+            <tr>
+              <td>Metric <%= i + 1 %> Name</td>
+              <td>
+                <select name="project[assumptions_attributes][<%= i %>][metric_name]">
+                  <option>
+                  </option>
+                  <% @list.each do |item| %>
+                    <option value="<%= item.metric_name %>"><%= item.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Metric Value</td>
+              <td><input name="project[assumptions_attributes][<%= i %>][value]">
+            </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= i %>][assumption_type]"
+                value="growth">Growth</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= i %>][assumption_type]"
+                value="run_rate">Run Rate</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= i %>][time_unit]"
+                value="q">Quarter</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= i %>][time_unit]"
+                value="y">Year</td>
+            </tr>
+            <% end %>
+          </table>
+          <input type="submit" value="Create">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<head>
+</head>
+<body>
+  <%= render :partial => 'shared/logoutheader' %>
+  <section class="project-show group">
+    <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+    <article class="project-content group">
+      <div class="project-totals">
+        <span class="project-name"><%= @project.name %></span><br>
+        <span class="company-headquarters"><%= @company.headquarters %></span><br>
+        <% if @company.industries %>
+        <ul class="company-industries">
+          <% @company.industries.each do |industry| %>
+            <li><%= industry.name %></li>
+          <% end %>
+        </ul>
+        <% end %>
+        <span class="company-employees"><%= @company.employees %></span>
+      </div>
+      <% if @assumptions %>
+      <div class="show-assumptions">
+        <ul>Assumptions<br>
+          <% @assumptions.each do |assume| %>
+            <% if assume.assumption_type == "growth" %>
+              <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %>
+                <%= assume.name %> growth</li>
+            <% else %>
+            <li>
+              <% if assume.value > 1.001 %>
+                $<%= assume.value %>mm in <%= assume.name %> per
+                <%= assume.time %>
+              <% else %>
+                <%= assume.value*100 %>% in <%= assume.name %> per
+                <%= assume.time %>
+              <% end %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+      <% end %>
+      <div class="financials">
+        <ul>
+          <li>Company Financials</li>
+          <li><%= link_to "Income Statement", user_company_income_statement_url %></li>
+          <li><%= link_to "Balance Sheet", user_company_balance_sheet_url %></li>
+          <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>
+        </ul>
+      </div>
+      <br><span id="user-email"><%= @user.email %></span>
+    </article>
+  </section>
+</body>

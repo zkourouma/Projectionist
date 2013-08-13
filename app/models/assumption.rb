@@ -52,7 +52,7 @@ class Assumption < ActiveRecord::Base
     when "treasury_price"
       "Treasury Share Price"
     when "treasury_quantity"
-      "Treasure Sahres"
+      "Treasure Shares"
     when "investments"
       "Investments"
     when "divs_paid"

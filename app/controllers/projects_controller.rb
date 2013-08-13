@@ -1,7 +1,35 @@
 class ProjectsController < ApplicationController
-  def metrics
+  def new
+    @company = current_user.company
+    @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
+    @start_time = new_quarter.first
   end
 
-  def charts
+  def create
+    params[:project][:user_id] = current_user.id
+    params[:project][:company_id] = current_user.company.id
+    @project = Project.new(params[:project])
+
+    if @project.save
+      redirect_to user_project(@project)
+    else
+      flash.notice = "Could not save project"
+      render :new
+    end
   end
+
+  def edit
+  end
+
+  def show
+    @project = Project.find(params[:id])
+    @assumptions = @project.assumptions
+    @metrics = @project.metrics
+  end
+
+  @@assumption_list = ["revs", "cogs", "rd","sga", "interest", "tax", "cash",
+    "inventory", "receivables", "payables", "ppe", "lti", "std", "ltd",
+    "goodwill", "amortization", "common_price", "common_quantity",
+    "preferred_price", "preferred_quantity", "treasury_price", "treasury_quantity",
+    "depreciation", "investments", "divs_paid", "stock_financing", "debt_financing"]
 end
