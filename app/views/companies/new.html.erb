@@ -66,18 +66,14 @@
               <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
                 value="growth">Growth</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
-                value="absolute">Absolute</td>
+                value="run_rate">Run Rate</td>
             </tr>
             <tr>
               <td>Assumption Time Units</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
-                value="q">Quarters</td>
+                value="q">Quarter</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
-                value="y">Years</td>
-            </tr>
-            <tr>
-              <td>Assumption Timespan (choose "1" for growth)</td>
-              <td><input type="number" name="company[assumptions_attributes][<%= i %>][timespan]"></td>
+                value="y">Year</td>
             </tr>
             <% end %>
           </table>

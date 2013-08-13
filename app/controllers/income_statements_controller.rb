@@ -19,14 +19,13 @@ class IncomeStatementsController < ApplicationController
   def show
     @user = current_user
     @quarters = new_quarter
-    p @quarters
     @company = current_user.company
     @assumptions = @company.assumptions.select do |ass|
-      IncomeStatement.relevant.has_key?(ass.metric_name.to_sym)
+      IncomeStatement.relevant.has_value?(ass.name)
     end
     @income = @company.income
     @metric_tree = build_metric_tree(@company)
-    forecaster = forecast(@metric_tree)
+    forecaster = forecast(@metric_tree, @assumptions)
     @metric_tree.each do |metric, years|
       years.each do |year, quarters|
         quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}

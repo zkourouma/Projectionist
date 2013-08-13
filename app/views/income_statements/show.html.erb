@@ -87,11 +87,11 @@
             <% else %>
             <li>
               <% if assume.value > 1.001 %>
-                $<%= assume.value %>mm in <%= assume.name %> in <%= assume.timespan %>
-                <%= assume.time %>(s)
+                $<%= assume.value %>mm in <%= assume.name %> per
+                <%= assume.time %>
               <% else %>
-                <%= assume.value*100 %>% in <%= assume.name %> in <%= assume.timespan %>
-                <%= assume.time %>(s)
+                <%= assume.value*100 %>% in <%= assume.name %> per
+                <%= assume.time %>
               <% end %>
             </li>
             <% end %>

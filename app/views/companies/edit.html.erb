@@ -91,21 +91,15 @@
                 value="growth" <%= 'checked' if ass.assumption_type == 'growth' %>>
                 Growth</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][assumption_type]"
-                value="absolute" <%= 'checked' if ass.assumption_type == 'absolute' %>>
-                Absolute</td>
+                value="run_rate" <%= 'checked' if ass.assumption_type == 'run_rate' %>>
+                Run Rate</td>
             </tr>
             <tr>
               <td>Assumption Time Units</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][time_unit]"
-                value="q" <%= 'checked' if ass.time_unit == 'q' %>>Quarters</td>
+                value="q" <%= 'checked' if ass.time_unit == 'q' %>>Quarter</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= ass_i %>][time_unit]"
-                value="y" <%= 'checked' if ass.time_unit == 'y' %>>Years</td>
-            </tr>
-            <tr>
-              <td>Assumption Timespan (choose "1" for growth)</td>
-              <td><input type="number"
-                name="company[assumptions_attributes][<%= ass_i %>][timespan]"
-                value="<%= ass.timespan %>"></td>
+                value="y" <%= 'checked' if ass.time_unit == 'y' %>>Year</td>
             </tr>
             <% end %>
             <tr>
@@ -133,19 +127,14 @@
               <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
                 value="growth">Growth</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
-                value="absolute">Absolute</td>
+                value="run_rate">Run Rate</td>
             </tr>
             <tr>
               <td>Assumption Time Units</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
-                value="q">Quarters</td>
+                value="q">Quarter</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
-                value="y">Years</td>
-            </tr>
-            <tr>
-              <td>Assumption Timespan (choose "1" for growth)</td>
-              <td><input type="number"
-                name="company[assumptions_attributes][<%= @assumptions.count + 1 %>][timespan]"></td>
+                value="y">Year</td>
             </tr>
           </table>
           <!-- upload company logo -->

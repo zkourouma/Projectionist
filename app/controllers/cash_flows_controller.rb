@@ -25,7 +25,7 @@ class CashFlowsController < ApplicationController
     end
     @cash_flow = @company.cashflow
     @metric_tree = build_metric_tree(@company)
-    forecaster = forecast(@metric_tree)
+    forecaster = forecast(@metric_tree, @assumptions)
     @metric_tree.each do |metric, years|
       years.each do |year, quarters|
         quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}

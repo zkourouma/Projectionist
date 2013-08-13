@@ -11,12 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812135451) do
+ActiveRecord::Schema.define(:version => 20130813140905) do
 
   create_table "assumptions", :force => true do |t|
     t.integer  "company_id"
     t.integer  "project_id"
-    t.integer  "timespan"
     t.string   "time_unit"
     t.string   "metric_name"
     t.string   "assumption_type"

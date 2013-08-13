@@ -50,8 +50,10 @@ class CompaniesController < ApplicationController
     @projects = @company.projects
     @projects = nil if @projects.empty?
   end
-  @@assumption_list = ["revs", "gross_profit", "gross_margin", "operating_profit",
-    "operating_margin", "ebitda", "ebitda_margin", "net_income", "eps", "fcf", "cogs",
-    "cash", "inventory", "receivables", "payables", "ppe", "capex", "opex", "std", "ltd"]
+  @@assumption_list = ["revs", "cogs", "rd","sga", "interest", "tax", "cash",
+    "inventory", "receivables", "payables", "ppe", "lti", "std", "ltd",
+    "goodwill", "amortization", "common_price", "common_quantity",
+    "preferred_price", "preferred_quantity", "treasury_price", "treasury_quantity",
+    "depreciation", "investments", "divs_paid", "stock_financing", "debt_financing"]
 end
 
