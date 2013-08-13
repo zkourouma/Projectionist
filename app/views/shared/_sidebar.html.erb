@@ -2,7 +2,7 @@
     <div class="projects-index">
     <% unless projects.nil? %>
       <% projects.each do |project| %>
-        <%= link_to project.name user_project_url(project) %>
+        <%= link_to project.name, user_project_url(project) %>
       <% end %>
     <% else %>
       <a href="<%= new_user_project_url %>">Add Project</a>

@@ -5,17 +5,15 @@
   <section class="project-show group">
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
     <article class="project-content group">
-      <div class="project-totals">
+      <div class="project-metrics">
         <span class="project-name"><%= @project.name %></span><br>
-        <span class="company-headquarters"><%= @company.headquarters %></span><br>
-        <% if @company.industries %>
-        <ul class="company-industries">
-          <% @company.industries.each do |industry| %>
-            <li><%= industry.name %></li>
-          <% end %>
-        </ul>
+        <% if @metrics %>
+          <ul>
+            <% @metrics.each do |metric| %>
+              <li><%= metric.display_name %> <%= metric.value.round(1) %></li>
+            <% end %>
+          </ul>
         <% end %>
-        <span class="company-employees"><%= @company.employees %></span>
       </div>
       <% if @assumptions %>
       <div class="show-assumptions">

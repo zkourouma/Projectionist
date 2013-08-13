@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
     @project = Project.new(params[:project])
 
     if @project.save
-      redirect_to user_project(@project)
+      redirect_to user_project_url(@project)
     else
       flash.notice = "Could not save project"
       render :new
@@ -22,7 +22,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    @user = current_user
     @project = Project.find(params[:id])
+    @projects = @user.company.projects
     @assumptions = @project.assumptions
     @metrics = @project.metrics
   end
