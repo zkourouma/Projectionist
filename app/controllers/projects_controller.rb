@@ -1,6 +1,8 @@
 class ProjectsController < ApplicationController
   def new
     @company = current_user.company
+    @projects = @company.projects
+    @projects = nil if @projects.empty?
     @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
     @start_time = new_quarter.first
   end
@@ -19,6 +21,28 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    @project = Project.find(params[:id])
+    @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
+    @start_time = new_quarter.first
+    @assumptions = @project.assumptions
+    @metrics = @project.metrics
+    @user = current_user
+    @projects = @user.company.projects
+  end
+
+  def update
+    @project = Project.find(params[:id])
+    if @project.update_attributes(params[:project])
+      redirect_to user_project_url(@project)
+    else
+      flash.notice = "Could not update"
+      @user = current_user
+      @assumptions = @project.assumptions
+      @metrics = @project.metrics
+      @start_time = new_quarter.first
+      @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
+      render :edit
+    end
   end
 
   def show
@@ -27,6 +51,8 @@ class ProjectsController < ApplicationController
     @projects = @user.company.projects
     @assumptions = @project.assumptions
     @metrics = @project.metrics
+    @start_time = new_quarter.first
+    @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
   end
 
   @@assumption_list = ["revs", "cogs", "rd","sga", "interest", "tax", "cash",

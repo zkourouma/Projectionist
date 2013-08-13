@@ -158,9 +158,9 @@ module ApplicationHelper
     stat_type = year_two.first.last.statementable_type
     nombre = year_two.first.last.name
     4.times do |i|
-      next if year_two[i+1]
-      if year_one[i+1] && growth_assumption(assumptions)
-        multiplier = assumptions.find{|e| e.assumption_type == "growth"}
+      next if (year_two[i+1] || results[i+1])
+      multiplier = growth_assumption(assumptions)
+      if multiplier
         if multiplier.time_unit == 'y'
           new_val = year_one[i+1].value * (1 + multiplier.value)
         elsif i < 1

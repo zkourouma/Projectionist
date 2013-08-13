@@ -4,7 +4,7 @@
   <%= render :partial => 'shared/logoutheader' %>
   <section class="income-show group">
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-    <form action="<%= new_user_project_url %>" method="post" style="float:right">
+    <form action="<%= new_user_project_url %>" method="get" style="float:right">
       <button type="submit" class="new-project-button">Create New Project</button></form>
       <a href="<%= add_user_company_income_statement_url %>"
         style="display:block;float:left;margin-right:20px;">Add year</a>

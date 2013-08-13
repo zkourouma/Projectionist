@@ -1,0 +1,154 @@
+<html>
+  <head>
+    <title>Edit Project</title>
+  </head>
+
+  <body>
+    <%= render :partial => "shared/logoutheader" %>
+
+    <section class="group">
+      <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
+      <div class="new-project-form group">
+        <h2>Edit "<%= @project.name %>"</h2>
+        <form action="<%= user_project_url(@project) %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" value="put">
+          <table>
+            <tr>
+              <td><strong>Name</strong></td>
+              <td><input name="project[name]" value="<%= @project.name %>"></td>
+            </tr>
+            <tr>
+              <td><strong>Baseline Metrics</strong></td>
+            </tr>
+            <% @metrics.each_with_index do |met, met_i| %>
+              <tr>
+                <td><%= met.display_name %></td>
+                <td>
+                  <input type="text" name="project[metrics_attributes][<%= met_i %>][value]"
+                  value="<%= met.value.round(1) %>">
+                </td>
+                <td><input type="hidden"
+                  name="project[metrics_attributes][<%= met_i %>][id]"
+                  value="<%= met.id %>"></td>
+                <td><input type="hidden" name="project[metrics_attributes][<%= met_i %>][year]"
+                  value="<%= @start_time[1] %>"></td>
+                <td><input type="hidden" name="project[metrics_attributes][<%= met_i %>][quarter]"
+                  value="<%= @start_time[0] %>"></td>
+              </tr>
+            <% end %>
+            <% 3.times do |i| %>
+              <tr>
+                <td>Add Metrics</td>
+                <td>
+                  <select name="project[metrics_attributes][<%= @metrics.count + i %>][name]">
+                    <option>
+                    </option>
+                    <% @list.each do |item| %>
+                      <% next if @metrics.any?{|m| m.name == item.metric_name}  %>
+                      <option value="<%= item.metric_name %>"><%= item.name %></option>
+                    <% end %>
+                  </select>
+                </td>
+                <td>
+                  <input type="text"
+                  name="project[metrics_attributes][<%= @metrics.count + i %>][value]">
+                </td>
+                <td><input type="hidden"
+                  name="project[metrics_attributes][<%= @metrics.count + i %>][year]"
+                  value="<%= @start_time[1] %>"></td>
+                <td><input type="hidden"
+                  name="project[metrics_attributes][<%= @metrics.count + i %>][quarter]"
+                  value="<%= @start_time[0] %>"></td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><strong>Assumptions</strong></td>
+            </tr>
+            <tr>
+            </tr>
+            <% @assumptions.each_with_index do |ass, ass_i| %>
+            <tr>
+              <input type="hidden"
+              name="project[assumptions_attributes][<%= ass_i %>][id]"
+              value="<%= ass.id %>">
+              <td>Metric Name</td>
+              <td>
+                <select name="project[assumptions_attributes][<%= ass_i %>][metric_name]">
+                  <option>
+                  </option>
+                  <% @list.each do |item| %>
+                    <option value="<%= item.metric_name %>"
+                      <%= 'selected' if item.metric_name == ass.metric_name %>>
+                      <%= item.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Metric Value</td>
+              <td><input name="project[assumptions_attributes][<%= ass_i %>][value]"
+                value="<%= ass.value %>"></td>
+            </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= ass_i %>][assumption_type]"
+                value="growth" <%= 'checked' if ass.assumption_type == 'growth' %>>
+                Growth</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= ass_i %>][assumption_type]"
+                value="run_rate" <%= 'checked' if ass.assumption_type == 'run_rate' %>>
+                Run Rate</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= ass_i %>][time_unit]"
+                value="q" <%= 'checked' if ass.time_unit == 'q' %>>Quarter</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= ass_i %>][time_unit]"
+                value="y" <%= 'checked' if ass.time_unit == 'y' %>>Year</td>
+            </tr>
+            <% end %>
+            <tr>
+              <td><strong>Add Assumption</strong></td>
+            </tr>
+            <tr>
+              <td>Metric Name</td>
+              <td>
+                <select name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][metric_name]">
+                  <option>
+                  </option>
+                  <% @list.each do |item| %>
+                    <option value="<%= item.metric_name %>"><%= item.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Metric Value</td>
+              <td><input name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][value]"></td>
+            </tr>
+            <tr>
+              <td>Assumption Type</td>
+              <td><input type="radio"
+                name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
+                value="growth">Growth</td>
+              <td><input type="radio"
+                name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][assumption_type]"
+                value="run_rate">Run Rate</td>
+            </tr>
+            <tr>
+              <td>Assumption Time Units</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
+                value="q">Quarter</td>
+              <td><input type="radio" name="project[assumptions_attributes][<%= @assumptions.count + 1 %>][time_unit]"
+                value="y">Year</td>
+            </tr>
+          </table>
+          <br>
+          <input type="submit" value="Update">
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

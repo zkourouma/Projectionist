@@ -4,7 +4,7 @@
   <%= render :partial => 'shared/logoutheader' %>
   <section class="company-show group">
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-    <form action="<%= new_user_project_url %>" method="post" style="float:right">
+    <form action="<%= new_user_project_url %>" method="get" style="float:right">
       <button type="submit" class="new-project-button">Create New Project</button></form>
     <article class="company-content group">
       <div class="company-totals">
@@ -42,6 +42,7 @@
       <% end %>
       <% unless @projects.nil? %>
       <div class="show-projects">
+        Projects<br>
         <% @projects.each do |project| %>
           <a href="<%= user_project_url(project) %>"><%= project.name %></a>
         <% end %>

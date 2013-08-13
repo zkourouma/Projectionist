@@ -20,6 +20,8 @@ class CashFlowsController < ApplicationController
     @user = current_user
     @quarters = new_quarter
     @company = current_user.company
+    @projects = @company.projects
+    @projects = nil if @projects.empty?
     @assumptions = @company.assumptions.select do |ass|
       CashFlow.relevant.has_key?(ass.metric_name.to_sym)
     end
