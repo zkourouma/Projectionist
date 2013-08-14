@@ -48,17 +48,31 @@ class ProjectsController < ApplicationController
   def show
     @user = current_user
     @project = Project.find(params[:id])
-    @projects = @user.company.projects
-    @assumptions = @project.assumptions
-    @metrics = @project.metrics
+    @company = @user.company
+    @projects = @company.projects
+    @assumptions, @metrics = @project.assumptions, @project.metrics
     @start_time = new_quarter.first
-    @data = hashify(@metrics)
+    gon.data = data_cleanse(@metrics)
     @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
   end
 
-  def hashify(array)
-    data = Hash.new
-    array.each{|m| data[m.display_name] = m.value}
+  def data_cleanse(metrics)
+    depth = metrics.map{|m| m.quarter }.uniq.length + 1
+    data = Array.new(depth, Array.new)
+    prehash = Hash.new
+    prehash[:headers] = ['Quarter']
+    metrics.each do |m|
+      prehash[:headers] << m.display_name unless prehash[:headers].include?(m.display_name)
+      prehash[m.quarter]||= ["#{m.quarter}Q#{m.year}"]
+      prehash[m.quarter] << m.value
+    end
+
+    data[0] = prehash[:headers]
+
+    prehash.each_with_index do |(key, value), i|
+      next if i == 0
+      data[i] = value
+    end
     data
   end
 

@@ -1,5 +1,19 @@
 <head>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable( gon.data );
 
+    var options = {
+      title: 'Project Metrics',
+      hAxis: {title: 'Quarter', titleTextStyle: {color: 'red'}}
+    };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+</script>
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
@@ -40,7 +54,6 @@
       </div>
       <% end %>
       <div id="chart_div">
-        <%= column_chart @data %>
       </div>
       <div class="financials">
         <ul>

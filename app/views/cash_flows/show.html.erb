@@ -1,4 +1,32 @@
 <head>
+<script type="text/javascript">
+    function drawVisualization() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Quarter');
+
+      gon.columns.forEach(function(item, index, array) {
+        if(index % 2 === 0){
+          data.addColumn(item[0], item[1]);
+        }
+        else{
+          data.addColumn({type: item[0], role: item[1]});
+        }
+      });
+      
+      data.addRows(gon.details);        
+
+      var options = {
+        title : 'Cash Flow',
+        hAxis: {title: "Quarter"},
+        seriesType: "bars"//,
+        // series: {5: {type: "line"}}
+      };
+
+      var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+    google.setOnLoadCallback(drawVisualization);
+</script>
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
@@ -105,6 +133,7 @@
         </ul>
       </div>
       <% end %>
+      <div id="chart_div"></div>
       <% unless @projects.nil? %>
       <div class="show-projects">
         <% @projects.each do |project| %>

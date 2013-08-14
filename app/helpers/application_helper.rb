@@ -39,14 +39,12 @@ module ApplicationHelper
     end
   end
 
-  def get_metric_val(statementable_id, metric_name, year, quarter)
-    Metric.where(statementable_id: statementable_id, name: metric_name,
-                  quarter: quarter, year: year).first.value
-  end
-
   def build_metric_tree(company)
-    ids = [company.income, company.balance, company.cashflow]
-    list = Metric.where(statementable_id: ids)
+    ids = [company.income.id, company.balance.id, company.cashflow.id]
+    income = Metric.where(statementable_id: ids[0], statementable_type: 'IncomeStatement')
+    balance = Metric.where(statementable_id: ids[1], statementable_type: 'BalanceSheet')
+    cashflow = Metric.where(statementable_id: ids[2], statementable_type: 'CashFlow')
+    list = income + balance + cashflow# + company.projects.map(&:metrics).flatten
     results = Hash.new do |hash, key|
       hash[key] = Hash.new do |hash, key|
         hash[key] = Hash.new
@@ -207,6 +205,45 @@ module ApplicationHelper
                           name: nombre, forward: true)
     end
     results
+  end
+
+  def charter(metric_tree, relevance, time)
+    depth = 0
+    footers = Hash.new{|hash, key| hash[key] = Array.new}
+    metric_tree.each do |name, years|
+      next unless relevance.has_value?(name)
+      years.each do |year, quarters| 
+        quarters.each do |quarter, metric|
+          unless footers[year].include?(quarter)
+            footers[year] << quarter
+            depth += 1
+          end
+        end
+      end
+    end
+    predata = Hash.new{|hash, key| hash[key] = Array.new}
+    metric_tree.each do |name, years|
+      next unless relevance.has_value?(name)
+      predata["labels"] << ['number', name]
+      predata["labels"] << ['boolean', 'certainty']
+      time.each do |pair|
+        if years[pair[1]][pair[0]]
+          predata["#{pair[1]}Q#{pair[0]}"] << years[pair[1]][pair[0]].value
+          predata["#{pair[1]}Q#{pair[0]}"] << !years[pair[1]][pair[0]].forward
+        else
+          predata["#{pair[1]}Q#{pair[0]}"] << 0
+          predata["#{pair[1]}Q#{pair[0]}"] << false
+        end
+      end
+    end
+    postdata = Array.new
+    predata.each do |label, datum|
+      next if label == "labels"
+      postdata << ([label] + datum)
+    end
+    postdata.sort!{|x,y| x.first <=> y.first }
+    postdata.unshift(predata['labels'])
+    postdata
   end
 
   def growth_assumption(assumptions)

@@ -33,6 +33,8 @@ class CashFlowsController < ApplicationController
         quarters.merge!(forecaster[metric][year]){|key, v1, v2| v1}
       end
     end
+    chart_data = charter(@metric_tree, CashFlow.relevant, @quarters)
+    gon.columns, gon.details = chart_data.first, chart_data[1..-1]
     @list_items = gen_item_list(@cash_flow)
   end
 

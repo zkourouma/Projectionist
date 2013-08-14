@@ -9,8 +9,8 @@ require 'csv'
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-u = User.new(:email => 'zkourouma@gmail.com')
-u.password = 'pass'
+u = User.new(:email => 'demo@gmail.com')
+u.password = 'password'
 u.save
 
 c = Company.create(:name => 'Relative Electric', :headquarters => '7 Psuedo pl, New York, NY',
@@ -46,6 +46,15 @@ CSV.foreach("db/cash_metrics.csv", headers: true) do |row|
   params['statementable_id'],params['statementable_type'] = 1, 'CashFlow'
   Metric.create(params)
 end
+
+p = Project.create(name: "growth", company_id: 1, user_id: 1)
+
+m = Metric.create(name: 'revs', quarter: 4, year: 2013, value: 100, statementable_id: 1,
+    statementable_type: 'Project', forward: true)
+m1 = Metric.create(name: 'rd', quarter: 4, year: 2013, value: 20, statementable_id: 1,
+    statementable_type: 'Project', forward: true)
+m2 = Metric.create(name: 'sga', quarter: 4, year: 2013, value: 10, statementable_id: 1,
+    statementable_type: 'Project', forward: true)
 
 ['Software', 'Semiconductors', 'Retail', 'Homebuilding', 'Restaurant', 'Home Products',
 'Transportation', 'Aero & Defense', 'Manufacturing', 'Mining', 'Bank', 'Insurance',

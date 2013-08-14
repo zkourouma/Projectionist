@@ -27,9 +27,11 @@
                 value="<%= item.metric_name %>">
                 <td><input type="text" name="project[metrics_attributes][<%= i %>][value]"></td>
                 <td><input type="hidden" name="project[metrics_attributes][<%= i %>][year]"
-                value="[<%= @start_time[1] %>"></td>
+                value="<%= @start_time[1] %>"></td>
                 <td><input type="hidden" name="project[metrics_attributes][<%= i %>][quarter]"
-                value="[<%= @start_time[0] %>"></td>
+                value="<%= @start_time[0] %>"></td>
+                <td><input type="hidden" name="project[metrics_attributes][<%= i %>][forward]"
+                value="<%= true %>"></td>
               </tr>
             <% end %>
             <tr>

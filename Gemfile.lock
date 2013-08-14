@@ -83,6 +83,9 @@ GEM
     figaro (0.7.0)
       bundler (~> 1.0)
       rails (>= 3, < 5)
+    gon (4.1.1)
+      actionpack (>= 2.3.0)
+      json
     hike (1.2.3)
     i18n (0.6.1)
     journey (1.0.4)
@@ -176,6 +179,7 @@ DEPENDENCIES
   debugger
   devise
   figaro
+  gon
   jquery-rails
   paperclip
   pg
