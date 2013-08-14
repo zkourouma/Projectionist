@@ -1,7 +1,7 @@
 class BalanceSheetsController < ApplicationController
 
   def new
-    @quarters = new_quarter
+    @quarters = new_quarter[1..-1]
   end
 
   def create
@@ -39,9 +39,10 @@ class BalanceSheetsController < ApplicationController
   end
 
   def edit
-    @balance = current_user.company.balance
-    @metric_tree = build_metric_tree(@balance)
     @year, @quarter = params[:year].to_i, params[:quarter].to_i
+    @company = current_user.company
+    @balance = @company.balance
+    @metric_tree = build_metric_tree(@company)
     @surplus = @metric_tree.length + 1
   end
 

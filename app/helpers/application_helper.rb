@@ -190,6 +190,7 @@ module ApplicationHelper
     avg = 0
     year_one.each do |quarter, metric| 
       next unless year_two[quarter]
+      next if metric.value == 0
       avg += (year_two[quarter].value - metric.value)/metric.value
     end
     avg = [avg/year_one.length, 5].min

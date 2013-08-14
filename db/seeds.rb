@@ -13,8 +13,8 @@ u = User.new(:email => 'demo@gmail.com')
 u.password = 'password'
 u.save
 
-c = Company.create(:name => 'Relative Electric', :headquarters => '7 Psuedo pl, New York, NY',
-                  :employees => 3, :user_id => 1)
+c = Company.create(:name => 'VMWare', :headquarters => 'Palo Alto, CA',
+                  :employees => 13800, :user_id => 1)
 CompanyIndustry.create(company_id: 1, industry_id: 1)
 a = Assumption.create(value: 0.2, company_id: 1, metric_name: "revs",
                         time_unit: "y", assumption_type: "growth")

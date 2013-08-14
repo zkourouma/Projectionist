@@ -1,3 +1,9 @@
+.company-show{
+  display:block;
+  width: 90%;
+  margin: 30px auto;
+}
+
 .company-content{
   display:block;
   float:left;
@@ -13,66 +19,89 @@
   padding:5px;
 }
 
-.company-totals{
+.company-facts{
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc
+}
 
+.assumptions{
+  display: block;
+  float: left;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc
+}
+
+.assumptions > ul > li{
+  list-style: none;
+  margin-left: 10px;
+}
+
+.financials > ul > li{
+  margin-left: 10px;
 }
 
 .company-industries{
   list-style:none;
+  margin-bottom: 10px;
 }
 
-.financials > ul{
-  list-style:none;
+.statement-show{
+  display:block;
+  width: 90%;
+  margin: 30px auto;
 }
 
-.financials > ul > li > a{
-  color:#06266F;
+.statement-content{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
 }
 
-.show-assumptions > ul {
-  list-style:none;
+#chart_div{
+  display: block;
+  float: left;
+}
+
+#new_project_button{
+  float: right;
 }
 
 .statement-ttm{
   display:block;
   float:left;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
 }
 
-.income-show{
-  display:block;
-  margin: 30px auto;
-}
-.income-show > .income-content{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
+.meta-ttm{
+  border-bottom: 1px solid #ccc;
   padding: 20px;
+  margin-bottom: 10px;
 }
 
-.balance-show{
-  display:block;
-  margin: 30px auto;
-}
-
-.balance-show > .balance-content{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
+.pseudo-nav{
+  display: block;
+  float: right;
   padding: 20px;
+  margin-left: 20px;
+  border-left: 1px solid #ccc;
 }
 
-.cash-show{
-  display:block;
-  margin: 30px auto;
+.pseudo-nav > .financials {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
 }
 
-
-.cash-show > .cash-content{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
-  padding: 20px;
+.edit-button{
+  display: block;
+  float: right;
+  padding-bottom: 20px;
 }
+
 
 .project-content{
   display:block;
@@ -86,5 +115,21 @@
 }
 
 .project-content > .project-metrics > ul > li{
-  padding:5px;
+  padding: 5px;
+}
+
+#chart_div{
+  display: block;
+  float: left;
+}
+
+.show-assumptions > ul {
+  list-style:none;
+}
+
+.financials{
+  
+}
+.financials > ul{
+  list-style:none;
 }

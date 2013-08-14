@@ -8,20 +8,10 @@
   float: left;
 }
 
-.login-header > h2 > a{
-  color: #333;
-  text-decoration: none;
-}
-
 .login-header > h3{
   float: right;
 }
 
-.login-header > h3 > a{
-  color: #333;
-  text-decoration: none;
-}
-
 #fake-chart{
-  float: left;
+  float: right;
 }

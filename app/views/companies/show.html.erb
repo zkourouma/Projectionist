@@ -7,20 +7,21 @@
     <form action="<%= new_user_project_url %>" method="get" style="float:right">
       <button type="submit" class="new-project-button">Create New Project</button></form>
     <article class="company-content group">
-      <div class="company-totals">
-        <span class="company-name"><%= @company.name %></span><br>
-        <span class="company-headquarters"><%= @company.headquarters %></span><br>
+      <div class="company-facts">
+        <div class="facts">Name: <%= @company.name %></div><br>
+        <div class="facts">HQ: <%= @company.headquarters %></div><br>
         <% if @company.industries %>
+        Industries:<br>
         <ul class="company-industries">
           <% @company.industries.each do |industry| %>
             <li><%= industry.name %></li>
           <% end %>
         </ul>
         <% end %>
-        <span class="company-employees"><%= @company.employees %></span>
+        <div class="facts">Employees: <%= @company.employees %></div>
       </div>
       <% if @assumptions %>
-      <div class="show-assumptions">
+      <div class="assumptions">
         <ul>Assumptions<br>
           <% @assumptions.each do |assume| %>
             <% if assume.assumption_type == "growth" %>
@@ -40,23 +41,17 @@
         </ul>
       </div>
       <% end %>
-      <% unless @projects.nil? %>
-      <div class="show-projects">
-        Projects<br>
-        <% @projects.each do |project| %>
-          <a href="<%= user_project_url(project) %>"><%= project.name %></a>
-        <% end %>
-      </div>
-      <% end %>
       <div class="financials">
+        Financials<br>
         <ul>
-          <li>Financials</li>
-          <li><%= link_to "Income Statement", user_company_income_statement_url %></li>
-          <li><%= link_to "Balance Sheet", user_company_balance_sheet_url %></li>
-          <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>
+          <li><a href="<%= user_company_income_statement_url %>">
+            Income Statement</a></li>
+          <li><a href="<%= user_company_balance_sheet_url %>">
+            Balance Sheet</a></li>
+          <li><a href="<%= user_company_cash_flow_url %>">
+            Cash Flow Statement</a></li>
         </ul>
       </div>
-      <br><span id="user-email"><%= @user.email %></span>
     </article>
   </section>
 </body>

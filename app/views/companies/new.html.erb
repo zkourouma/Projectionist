@@ -46,7 +46,7 @@
             </tr>
             <% 3.times do |i| %>
             <tr>
-              <td>Metric <%= i + 1 %> Name</td>
+              <td>Assumption <%= i + 1 %> Metric</td>
               <td>
                 <select name="company[assumptions_attributes][<%= i %>][metric_name]">
                   <option>
@@ -75,6 +75,12 @@
                 value="q">Quarter</td>
               <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
                 value="y">Year</td>
+            </tr>
+            <tr>
+              <td> </td>
+            </tr>
+            <tr>
+              <td> </td>
             </tr>
             <% end %>
           </table>

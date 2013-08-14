@@ -1,7 +1,7 @@
 class CashFlowsController < ApplicationController
 
   def new
-    @quarters = new_quarter
+    @quarters = new_quarter[1..-1]
   end
 
   def create
@@ -39,9 +39,10 @@ class CashFlowsController < ApplicationController
   end
 
   def edit
-    @cashflow = current_user.company.cashflow
-    @metric_tree = build_metric_tree(@cashflow)
     @year, @quarter = params[:year].to_i, params[:quarter].to_i
+    @company = current_user.company
+    @cashflow = @company.cashflow
+    @metric_tree = build_metric_tree(@company)
     @surplus = @metric_tree.length + 1
   end
 

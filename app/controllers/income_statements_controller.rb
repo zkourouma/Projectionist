@@ -1,7 +1,7 @@
 class IncomeStatementsController < ApplicationController
 
   def new
-    @quarters = new_quarter
+    @quarters = new_quarter[1..-1]
   end
 
   def create
@@ -40,13 +40,17 @@ class IncomeStatementsController < ApplicationController
 
   def edit
     @year, @quarter = params[:year].to_i, params[:quarter].to_i
-    @income = current_user.company.income
-    @metric_tree = build_metric_tree(@income)
+    @company = current_user.company
+    @income = @company.income
+    @metric_tree = build_metric_tree(@company)
     @surplus = @metric_tree.length + 1
+    @projects = @company.projects
   end
 
   def update
-    @income = current_user.company.income
+    @company = current_user.company 
+    @income = @company.income
+    @projects = @company.projects
     if @income.update_attributes(params[:income])
       redirect_to user_company_income_statement_url
     else
@@ -60,7 +64,9 @@ class IncomeStatementsController < ApplicationController
   end
 
   def add_year
-    @income = current_user.company.income
+    @company = current_user.company 
+    @income = @company.income
+    @projects = @company.projects
     params[:income][:metrics_attributes].each do |metric, value|
       value[:year] = params[:set_year].to_i
     end

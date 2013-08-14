@@ -25,15 +25,17 @@ body, header, section, div, ul, li, a{
   font: inherit;
   vertical-align: baseline;
   font-family: sans-serif;
+  color: #0D0D64;
 }
 
 section{
-  width: 1000px;
+  width: 90%;
   margin: 20px auto;
 }
 
 th{
   text-align: center;
+  color: #A58A39;
 }
 
 th:first-child{
@@ -42,24 +44,57 @@ th:first-child{
 
 a{
   text-decoration: none;
+  color: #282899;
+  width: 100%;
 }
 
-.company-show{
-  display:block;
-  margin: 30px auto;
+a:hover{
+  color: #DBAB1D;
+}
+
+strong{
+  color: #A58A39;
+}
+.login {
+  width:90%;
+  margin:auto;
+  border-bottom: 1px solid #ccc;
 }
 
 .sidebar{
   display: block;
   float: left;
-  width: 200px;
+  width: 150px;
   height: 100%;
+  list-style: none;
 }
 
-.sidebar > a {
-  color: #333;
+.sidebar > li:hover{
+  background: #ccc;
+}
+.sidebar > li > a{
+  padding: 0 25px 0 0;
 }
 
-.projects-index > a{
-  color: #333;
+.sidebar > .projects-index > ul{
+  margin-bottom: 7px;
+}
+
+.sidebar > .projects-index > ul > li{
+  list-style: none;
+  width: 100%;
+}
+
+.sidebar > .projects-index > ul > li > a{
+  padding: 0 50px 0 10px;
+}
+
+.sidebar > .projects-index > ul > li:hover{
+  background: #ccc;
+}
+.sidebar > .projects-index > a{
+  padding-right: 67px;
+}
+.sidebar > .projects-index > a:hover{
+  background: #ccc;
 }

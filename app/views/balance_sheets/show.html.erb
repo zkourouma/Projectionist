@@ -18,8 +18,7 @@
       var options = {
         title : 'Balance Sheet',
         hAxis: {title: "Quarter"},
-        seriesType: "bars"//,
-        // series: {5: {type: "line"}}
+        seriesType: "bars"
       };
 
       var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
@@ -30,18 +29,13 @@
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
-  <section class="balance-show group">
+  <section class="statement-show group">
     <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-    <form action="<%= new_user_project_url %>" method="get" style="float:right">
-      <button type="submit" class="new-project-button">Create New Project</button></form>
-      <a href="<%= add_user_company_balance_sheet_url %>"
-        style="display:block;float:left;margin-right:20px;">Add year</a>
-      <form action="<%= edit_user_company_balance_sheet_url %>" method="get" style="float:left">
-        <label>Quarter<input type="number" name="quarter"></label>
-        <label>Year<input type="number" name="year"></label>
-        <button type="submit" class="edit-button">Edit Q</button></form>
+    <form action="<%= new_user_project_url %>" method="get">
+      <button type="submit" id="new_project_button">Create New Project</button>
+    </form>
 
-    <article class="balance-content group">
+    <article class="statement-content group">
       <div class="statement-ttm">
         <table>
           <tr>
@@ -64,11 +58,12 @@
             </tr>
           <% end %>
         </table>
+        <div id="chart_div"></div>
       </div>
       <div class="meta-ttm">
         <table>
           <tr>
-            <th>Stat</th>
+            <th>Composite</th>
             <% @quarters.each_with_index do |quarter, q_i| %>
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
@@ -112,7 +107,7 @@
         </table>
       </div>
       <% if @assumptions %>
-      <div class="show-assumptions">
+      <div class="assumptions">
         <ul><strong>Assumptions</strong><br>
           <% @assumptions.each do |assume| %>
             <% if assume.assumption_type == "growth" %>
@@ -122,10 +117,10 @@
             <li>
               <% if assume.value > 1.001 %>
                 $<%= assume.value %>mm in <%= assume.name %> per
-                <%= assume.time %>(s)
+                <%= assume.time %>
               <% else %>
                 <%= assume.value*100 %>% in <%= assume.name %> per
-                <%= assume.time %>(s)
+                <%= assume.time %>
               <% end %>
             </li>
             <% end %>
@@ -133,23 +128,25 @@
         </ul>
       </div>
       <% end %>
-      <div id="chart_div"></div>
-      <% unless @projects.nil? %>
-      <div class="show-projects">
-        <% @projects.each do |project| %>
-          <a href="<%= user_project_url(project) %>"><%= project.name %></a>
-        <% end %>
+      <div class="pseudo-nav">
+        <a href="<%= add_user_company_balance_sheet_url %>"
+          id="add_year_link">Add year</a><br>
+        <form action="<%= edit_user_company_balance_sheet_url %>" method="get"
+          class="edit-button">
+          Edit
+          <label>Quarter<input type="number" name="quarter"></label>
+          <label>Year<input type="number" name="year"></label>
+          <input type="submit" value="Edit Q"></form><br>
+
+        <div class="financials">
+          <ul>
+            <li><strong>Financials</strong></li>
+            <li><%= link_to "Income Statement", user_company_income_statement_url %></li>
+            <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>
+          </ul>
+        </div>
+        <br><%= link_to "Back", :back %>
       </div>
-      <% end %>
-      <div class="financials">
-        <ul>
-          <li><strong>Financials</strong></li>
-          <li><%= link_to "Income Statement", user_company_income_statement_url %></li>
-          <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>
-        </ul>
-      </div>
-      <br><%= link_to "Back", :back %><br>
-      <br><span id="user-email"><%= @user.email %></span>
     </article>
   </section>
 </body>

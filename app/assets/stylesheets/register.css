@@ -1,15 +1,4 @@
-.new-company-form{
-  width: 800px;
-}
-.new-IS-form{
-  width: 800px;
-}
-
-.new-BS-form{
-  width: 800px;
-}
-
-.new-CF-form{
+.new-form{
   width: 800px;
 }
 
@@ -18,5 +7,4 @@
   float:left;
   border-left: 2px solid #999;
   padding: 20px;
-}
 }
