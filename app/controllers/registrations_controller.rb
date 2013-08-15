@@ -1,4 +1,4 @@
-class RegistrationsController::RegistrationsController < Devise::RegistrationsController
+class RegistrationsController < Devise::RegistrationsController
   def edit
     @user = current_user
     @company = @user.company

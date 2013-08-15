@@ -11,77 +11,50 @@
         <h2>New Company Profile</h2>
         <form action="<%= user_company_url %>" method="post">
           <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-          <table>
-            <tr>
-              <td><strong>Name</strong></td>
-              <td><input name="company[name]"></td>
-            </tr>
-            <tr>
-              <td><strong>Headquarters</strong></td>
-              <td><textarea name="company[headquarters]"
-            style="vertical-align:top"></textarea></td>
-            </tr>
-            <tr>
-              <td><strong># of Employees</strong></td>
-              <td><input type="number"></td>
-            </tr>
-            <tr>
-              <td><strong>Industries</strong></td>
+          <label>Name<input name="company[name]"></label><br>
+          <label>Headquarters<textarea name="company[headquarters]"
+            style="vertical-align:top"></textarea></label><br>
+          <label># of Employees<input type="number"></label><br>
+          <label>Industries
             <% 3.times do |i| %>
-                <td>
-                  <select name="company[company_industries_attributes][<%= i %>][industry_id]">
-                    <option>
-                    </option>
-                    <% @industries.each do |industry| %>
-                      <option value="<%= industry.id %>"><%= industry.name %></option>
-                    <% end %>
-                  </select>
-                </td>
+              <select name="company[company_industries_attributes][<%= i %>][industry_id]">
+                <option>
+                </option>
+                <% @industries.each do |industry| %>
+                  <option value="<%= industry.id %>"><%= industry.name %></option>
+                <% end %>
+              </select>
             <% end %>
-            </tr>
-            <tr>
-              <td><strong>Assumptions</strong></td>
-            </tr>
-            <tr>
-            </tr>
-            <% 3.times do |i| %>
-            <tr>
-              <td>Assumption <%= i + 1 %> Metric</td>
-              <td>
-                <select name="company[assumptions_attributes][<%= i %>][metric_name]">
-                  <option>
+          </label><br>
+          <strong>Assumptions</strong><br>
+          <% 3.times do |i| %>
+            <label>Assumption <%= i + 1 %> Metric
+              <select name="company[assumptions_attributes][<%= i %>][metric_name]">
+                <option>
+                </option>
+                <% @assumes.each do |assume| %>
+                  <option value="<%= assume.metric_name %>"><%= assume.name %>
                   </option>
-                  <% @assumes.each do |assume| %>
-                    <option value="<%= assume.metric_name %>"><%= assume.name %>
-                    </option>
-                  <% end %>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Metric Value</td>
-              <td><input name="company[assumptions_attributes][<%= i %>][value]">
-            </tr>
-            <tr>
-              <td>Assumption Type</td>
-              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
-                value="growth">Growth</td>
-              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
-                value="run_rate">Run Rate</td>
-            </tr>
-            <tr>
-              <td>Assumption Time Units</td>
-              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
-                value="q">Quarter</td>
-              <td><input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
-                value="y">Year</td>
-            </tr>
-            <tr>
-              <td> </td>
-            </tr>
-            <tr>
-              <td> </td>
-            </tr>
+                <% end %>
+              </select>
+            </label><br>
+            <label>Metric Value
+              <input name="company[assumptions_attributes][<%= i %>][value]">
+            </label><br>
+            <label>Assumption Type
+              <label>Growth<input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
+                value="growth"></label>
+              <label>Run Rate
+                <input type="radio" name="company[assumptions_attributes][<%= i %>][assumption_type]"
+                value="run_rate"></label>
+            </label><br>
+            <label>Assumption Time Units
+              <label>Quarter
+                <input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
+                value="q"></label>
+              <label>Year
+                <input type="radio" name="company[assumptions_attributes][<%= i %>][time_unit]"
+                value="y"></label><br>
             <% end %>
           </table>
           <!-- upload company logo -->

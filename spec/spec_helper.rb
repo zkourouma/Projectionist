@@ -41,23 +41,28 @@ def sign_up(email)
   visit "/user/sign_up"
   fill_in "Email", with: email
   fill_in "Password", with: 'password'
-  click_button
+  click_button 'Sign Up'
 end
 
 def sign_up_as_charles
-  visit "/user/sign_up"
-  fill_in "Email", with: "charles@google.com"
-  fill_in "Password", with: 'password'
+  sign_up("charles@google.com")
 end
 
 def sign_in(email='charles@google.com', password='password')
   visit "/user/sign_in"
   fill_in "Email", with: email
   fill_in "Password", with: password
+  click_button 'Sign In'
 end
 
-def make_company(name=nil, hq=nil, )
-  
+def make_company(name="Google", hq="New York, NY")
+  sign_up_as_charles
+  visit "/user/company/new"
+  fill_in "Name", with: name
+  fill_in "Headquarters", with: hq
+  fill_in "# of Employees", with: 39
+  select 'Software', from: "Industries"
+  click_button ''
 end
 
 def set_income_statement(company)

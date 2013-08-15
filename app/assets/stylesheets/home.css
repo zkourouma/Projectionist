@@ -14,4 +14,25 @@
 
 #fake-chart{
   float: right;
+  width: 75%;
+}
+
+.new-form{
+  width: 800px;
+}
+
+.new-project-form{
+  display:block;
+  float:left;
+  border-left: 2px solid #999;
+  padding: 20px;
+}
+
+.user-form{
+  display: block;
+  float: left;
+}
+
+.landing{
+
 }
