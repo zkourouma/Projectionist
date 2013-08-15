@@ -6,8 +6,9 @@
   <body>
     <%= render :partial => "shared/logoutheader" %>
 
-    <section>
-      <div class="edit-company-form">
+    <section class="company-show group">
+      <%= render :partial => '../shared/sidebar', locals: {projects: @projects} %>
+      <div class="company-content group">
         <h2>Edit <%= @company.name %></h2>
         <form action="<%= user_company_url %>" method="post">
           <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
@@ -140,7 +141,8 @@
           <!-- upload company logo -->
           <br>
           <input type="submit" value="Update">
-        </form>
+        </form><br>
+        <br><%= link_to "Back", :back %>
       </div>
     </section>
   </body>

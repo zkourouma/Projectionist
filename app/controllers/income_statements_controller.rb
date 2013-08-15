@@ -2,6 +2,7 @@ class IncomeStatementsController < ApplicationController
 
   def new
     @quarters = new_quarter[1..-1]
+    @list_items = IncomeStatement.relevant
   end
 
   def create
@@ -17,11 +18,8 @@ class IncomeStatementsController < ApplicationController
   end
 
   def show
-    @user = current_user
     @quarters = new_quarter
     @company = current_user.company
-    @projects = @company.projects
-    @projects = nil if @projects.empty?
     @assumptions = @company.assumptions.select do |ass|
       IncomeStatement.relevant.has_value?(ass.name)
     end
@@ -44,13 +42,11 @@ class IncomeStatementsController < ApplicationController
     @income = @company.income
     @metric_tree = build_metric_tree(@company)
     @surplus = @metric_tree.length + 1
-    @projects = @company.projects
+    @full_statement = complete_statement?(@metric_tree, @year, @quarter, IncomeStatement.relevant)
   end
 
   def update
-    @company = current_user.company 
-    @income = @company.income
-    @projects = @company.projects
+    @income = current_user.company.income
     if @income.update_attributes(params[:income])
       redirect_to user_company_income_statement_url
     else
@@ -60,13 +56,12 @@ class IncomeStatementsController < ApplicationController
   end
 
   def add
+    @list_items = IncomeStatement.relevant
     render :add
   end
 
   def add_year
-    @company = current_user.company 
-    @income = @company.income
-    @projects = @company.projects
+    @income = current_user.company.income
     params[:income][:metrics_attributes].each do |metric, value|
       value[:year] = params[:set_year].to_i
     end
@@ -86,5 +81,4 @@ class IncomeStatementsController < ApplicationController
     end
     list.map!{|metric| [metric, IncomeStatement.relevant[metric.to_sym]]}
   end
-
 end

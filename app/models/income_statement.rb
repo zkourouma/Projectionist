@@ -111,11 +111,7 @@ class IncomeStatement < ActiveRecord::Base
   @@operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
         :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
 
-  @@relevant = {revs:"Revenue", gross_profit: "Gross Profit",
-    gross_margin: "Gross Margin", operating_profit: "Operating Profit",
-    operating_margin: "Operating Margin", ebitda: "EBITDA",
-    ebitda_margin: "EBITDA Margin", net_income: "Net Income", eps: "EPS",
-    cogs: "Cost of Goods Sold", opex: "Operating Expenses",
-    sga: "SG&A Expense", tax: "Tax Expense",
-    rd: "Research & Development"}
+  @@relevant = {revs:"Revenue", cogs: "Cost of Goods Sold", sga: "SG&A Expense",
+    rd: "Research & Development", interest: "Interest Expense",
+     tax: "Tax Expense"}
 end

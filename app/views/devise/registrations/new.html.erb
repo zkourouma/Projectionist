@@ -8,7 +8,7 @@
     <header class="login-header group">
       <h2><a href="/">Projectionist</a></h2>
     </header>
-    <div id="new-user-form">
+    <div id="new-user-form" class="landing">
       <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
         <%= devise_error_messages! %>
 
@@ -24,7 +24,7 @@
         <div><%= f.submit "Sign up" %></div>
       <% end %>
     </div>
-    <img id="fake-chart" src="#">
+    <img id="fake-chart" src="<%= asset_path("fake_chart.png") %>">
   </section>
 </body>
 </html>

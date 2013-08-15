@@ -21,75 +21,21 @@
                 <th><%= "#{@quarters[q_i][0]}Q#{@quarters[q_i][1]}" %></th>
               <% end %>
             </tr>
-            <tr>
-              <td><h3>Operating Activities</h3></td>
-            </tr>
-            <tr>
-              <td>Depreciation</td>
-              <% @quarters.each_with_index do |q, q_i| %>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][name]"
-                  value="depreciation"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][quarter]"
-                  value="<%= q[0] %>"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i %>][year]"
-                  value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td><h3>Investing Activities</h3></td>
-            </tr>
-            <tr>
-              <td>Investments</td>
-              <% @quarters.each_with_index do |q, q_i| %>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 5 %>][name]"
-                  value="investments"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 5 %>][quarter]"
-                  value="<%= q[0] %>"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 5 %>][year]"
-                  value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i + 5 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td><h3>Financing</h3></td>
-            </tr>
-            <tr>
-              <td>Dividends Paid</td>
-              <% @quarters.each_with_index do |q, q_i| %>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 6 %>][name]"
-                  value="divs_paid"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 6 %>][quarter]"
-                  value="<%= q[0] %>"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 6 %>][year]"
-                  value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i + 6 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Stock Financing</td>
-              <% @quarters.each_with_index do |q, q_i| %>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 7 %>][name]"
-                  value="stock_financing"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 7 %>][quarter]"
-                  value="<%= q[0] %>"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 7 %>][year]"
-                  value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i + 7 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Debt Financing</td>
-              <% @quarters.each_with_index do |q, q_i| %>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 8 %>][name]"
-                  value="debt_financing"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 8 %>][quarter]"
-                  value="<%= q[0] %>"></td>
-                <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + 8 %>][year]"
-                  value="<%= q[1] %>"></td>
-                <td><input type="text" name="cashflow[metrics_attributes][<%= q_i + 8 %>][value]"></td>
-              <% end %>
-            </tr>
+            <% @list_items.each_with_index do |(item, name), i| %>
+              <tr>
+                <td><%= name %></td>
+                <% @quarters.each_with_index do |q, q_i| %>
+                  <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + i %>][name]"
+                    value="<%= item %>"></td>
+                  <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + i %>][quarter]"
+                    value="<%= q[0] %>"></td>
+                  <td><input type="hidden" name="cashflow[metrics_attributes][<%= q_i + i %>][year]"
+                    value="<%= q[1] %>"></td>
+                  <td>
+                    <input type="text" name="cashflow[metrics_attributes][<%= q_i + i %>][value]"></td>
+                <% end %>
+              </tr>
+            <% end %>
           </table>
           <input type="submit" value="Complete">
         </form>

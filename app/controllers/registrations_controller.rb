@@ -1,14 +1,15 @@
-class RegistrationsController < Devise::RegistrationsController
-  before_filter :add_projects, only: [:edit]
+class RegistrationsController::RegistrationsController < Devise::RegistrationsController
+  def edit
+    @user = current_user
+    @company = @user.company
+    @projects = @company.projects
+    p @projects
+    super
+  end
 
   protected
 
   def after_sign_up_path_for(resource)
     '/user/company/new'
-  end
-
-  def add_projects
-    @projects = current_user.company.projects
-    @projects = nil if @projects.empty?
   end
 end

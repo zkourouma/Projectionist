@@ -19,6 +19,7 @@ class CompaniesController < ApplicationController
   def edit
     @user = current_user
     @company = @user.company
+    @projects = @company.projects
     @assumptions = @company.assumptions
     @industries = @company.industries
     @industrials = Industry.all

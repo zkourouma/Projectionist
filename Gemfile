@@ -12,6 +12,11 @@ group :development do
   gem 'sqlite3'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'debugger'
+end
 
 
 # Gems used only for assets and not required
@@ -53,3 +58,4 @@ gem 'paperclip'
 gem 'aws-sdk'
 gem 'chartkick'
 gem 'gon'
+gem 'rspec'

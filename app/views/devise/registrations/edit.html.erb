@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/logoutheader' %>
 <section class="company-show group">
-<%= render :partial => '../shared/sidebar', locals: {projects: @projects} %>
+<%= render :partial => '../shared/sidebar', locals: {projects: current_user.company.projects} %>
 
 <article class="company-content group">
 <h2>Edit <%= resource_name.to_s.humanize %></h2>

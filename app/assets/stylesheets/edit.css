@@ -1,32 +1,16 @@
-.income-edit{
-  display:block;
-  margin: 30px auto;
-}
-.income-edit > .edit-IS-form{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
-  padding: 20px;
+
+.quarter-picker{
+  margin-bottom: 10px;
 }
 
-.cash-edit{
+.editing{
   display:block;
-  margin: 30px auto;
-}
-.cash-edit > .edit-CF-form{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
-  padding: 20px;
+  margin-bottom: 20px;
 }
 
-.balance-edit{
-  display:block;
-  margin: 30px auto;
+.edit-nav{
+  display: block;
+  float: left;
+  margin
 }
-.balance-edit > .edit-BS-form{
-  display:block;
-  float:left;
-  border-left: 2px solid #999;
-  padding: 20px;
-}
+

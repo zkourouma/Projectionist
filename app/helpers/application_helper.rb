@@ -44,7 +44,7 @@ module ApplicationHelper
     income = Metric.where(statementable_id: ids[0], statementable_type: 'IncomeStatement')
     balance = Metric.where(statementable_id: ids[1], statementable_type: 'BalanceSheet')
     cashflow = Metric.where(statementable_id: ids[2], statementable_type: 'CashFlow')
-    list = income + balance + cashflow# + company.projects.map(&:metrics).flatten
+    list = income + balance + cashflow
     results = Hash.new do |hash, key|
       hash[key] = Hash.new do |hash, key|
         hash[key] = Hash.new
@@ -66,12 +66,14 @@ module ApplicationHelper
     metric_tree.each do |metric, years|
       ass = assumptions.select{|e| e.name == metric}
       ending = Date.today.strftime('%Y').to_i
-      ending -= 1 unless years[ending]
+      until years[ending]
+        ending -= 1
+      end
       start = ending - 1
       if !ass.empty?
         results[metric] = assumed(ass, years[start], years[ending])
       elsif years.length == 1
-        results[metric] = single_year(years.first[0], years)
+        results[metric] = single_year(years.first[0], years.first[1])
       else
         results[metric] = year_over_year(years[start], years[ending])
       end
@@ -84,19 +86,21 @@ module ApplicationHelper
       hash[key] = Hash.new
     end
     era = year_two.first.last.year + 1
-    stat_id = year_one.first.last.statementable_id
-    stat_type = year_one.first.last.statementable_type
-    nombre = year_one.first.last.name
+    stat_id = year_two.first.last.statementable_id
+    stat_type = year_two.first.last.statementable_type
+    nombre = year_two.first.last.name
     year_two.merge!(assumed_filler(assumptions, year_one, year_two)){|key, v1, v2| v1 } if year_two.length < 4
     4.times do |i|
       multiplier = growth_assumption(assumptions)
       if multiplier
-        if multiplier.time_unit == 'y'
+        if multiplier.time_unit == 'y' && year_two[i+1]
           new_val = year_two[i+1].value * (1 + multiplier.value)
-        elsif i < 1
+        elsif i < 1 && year_two[4]
           new_val = year_two[4].value * (1 + multiplier.value)
-        else
+        elsif results[era][i]
           new_val = results[era][i].value * (1 + multiplier.value)
+        else
+          new_val = some_average(year_two)
         end
       else
         level = assumptions.find{|e| e.assumption_type == "run_rate"}
@@ -159,12 +163,14 @@ module ApplicationHelper
       next if (year_two[i+1] || results[i+1])
       multiplier = growth_assumption(assumptions)
       if multiplier
-        if multiplier.time_unit == 'y'
+        if multiplier.time_unit == 'y' && year_one[i+1]
           new_val = year_one[i+1].value * (1 + multiplier.value)
-        elsif i < 1
+        elsif i < 1 && year_one[4]
           new_val = year_one[4].value * (1 + multiplier.value)
-        else
+        elsif year_two[i]
           new_val = year_two[i].value * (1 + multiplier.value)
+        else
+          new_val = some_average(year_two)
         end
       else
         level = assumptions.find{|e| e.assumption_type == "run_rate"}
@@ -249,6 +255,19 @@ module ApplicationHelper
 
   def growth_assumption(assumptions)
     assumptions.find{|e| e.assumption_type == "growth"}
+  end
+
+  def complete_statement?(tree, year, quarter, relevance)
+    relevance.each do |metric_name, name|
+      return false unless tree[name][year][quarter]
+    end
+    true
+  end
+
+  def some_average(year)
+    avg, counter = 0, 0
+    year.each{|q, m| avg+= m.value; counter += 1}
+    avg / counter
   end
 
   def annual_metric_val(statementable_id, metric_name, year, quarter=1)

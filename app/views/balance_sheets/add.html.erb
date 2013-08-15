@@ -6,198 +6,51 @@
   <body>
     <%= render :partial => "shared/logoutheader" %>
 
-    <section class="balance-edit group">
+    <section class="statement-show group">
       <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-      <div class="edit-BS-form group">
+      <article class="statement-content group">
         <h2>Add to Balance Sheet</h2><br>
-        <form action="<%= add_year_user_company_balance_sheet_url %>" method="post">
-          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-          <table>
-            <tr>
-              <td><label>Year<input type="text" name="set_year"></label></td>
-            </tr>
-            <tr>
-              <th>Line item:</th>
-              <% 4.times do |i| %>
-                <th></th>
-                <th></th>
-                <th><%= "#{i + 1}Q" %></th>
+        <div class="editing">
+          <form action="<%= add_year_user_company_balance_sheet_url %>" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <table>
+              <tr>
+                <td><label>Year<input type="text" name="set_year"></label></td>
+              </tr>
+              <tr>
+                <th>Line item:</th>
+                <% 4.times do |i| %>
+                  <th></th>
+                  <th></th>
+                  <th><%= "#{i + 1}Q" %></th>
+                <% end %>
+              </tr>
+              <% @list_items.each_with_index do |(metric_name, name), i| %>
+                <tr>
+                  <td><%= name %></td>
+                  <% 4.times do |j| %>
+                    <td><input type="hidden" name="balance[metrics_attributes][<%= i + j %>][name]"
+                      value="<%= metric_name %>"></td>
+                    <td><input type="hidden" 
+                      name="balance[metrics_attributes][<%= i + j %>][quarter]"
+                      value="<%= j + 1 %>"></td>
+                    <td>
+                      <input type="text" name="balance[metrics_attributes][<%= i + j %>][value]">
+                    </td>
+                  <% end %>
+                </tr>
               <% end %>
-            </tr>
-            <tr>
-              <td><h3>Assets</h3></td>
-            </tr>
-            <tr>
-              <td>Cash</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i %>][name]"
-                  value="cash"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Accounts Receivable</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 1 %>][name]"
-                  value="receivables"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 1 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 1 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Inventory</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 2 %>][name]"
-                  value="inventory"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 2 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 2 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Long Term Investments</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 3 %>][name]"
-                  value="lti"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 3 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 3 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Property, Plant & Equipment</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 4 %>][name]"
-                  value="ppe"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 4 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 4 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Goodwill</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 5 %>][name]"
-                  value="goodwill"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 5 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 5 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Amortization</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 6 %>][name]"
-                  value="amortization"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 6 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 6 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td><h3>Liabilities</h3></td>
-            </tr>
-            <tr>
-              <td>Accounts Payable</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 7 %>][name]"
-                  value="payables"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 7 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 7 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Short-term Debt</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 8 %>][name]"
-                  value="std"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 8 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 8 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Long-term Debt</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 9 %>][name]"
-                  value="ltd"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 9 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 9 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td><h3>Equity</h3></td>
-            </tr>
-            <tr>
-              <td>Average Common Stock Price</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 13 %>][name]"
-                  value="common_price"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 13 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 13 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td> Quantity Common Stock</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 10 %>][name]"
-                  value="common_quantity"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 10 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 10 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Average Preferred Stock Price</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 14 %>][name]"
-                  value="preferred_price"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 14 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 14 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Quantity Preferred Stock</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 11 %>][name]"
-                  value="preferred_quantity"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 11 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 11 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Average Treasury Stock Price</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 15 %>][name]"
-                  value="treasury_price"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 15 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 15 %>][value]"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <td>Quantity Treasury Stock</td>
-              <% 4.times do |i| %>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 12 %>][name]"
-                  value="treasury_quantity"></td>
-                <td><input type="hidden" name="balance[metrics_attributes][<%= i + 12 %>][quarter]"
-                  value="<%= i %>"></td>
-                <td><input type="text" name="balance[metrics_attributes][<%= i + 12 %>][value]"></td>
-              <% end %>
-            </tr>
-          </table>
-          <input type="submit" value="Add">
-        </form>
-      </div>
-      <br><%= link_to "Back", :back %>
+            </table>
+            <input type="submit" value="Add">
+          </form>
+        </div>
+        <div class="edit-nav">
+          <a href="<%= add_user_company_income_statement_url %>"
+            id="add_year_link">Add year</a><br>
+
+          <br><%= link_to "Back", :back %>
+        </div>        
+      </artivcle>
     </section>
   </body>
 </html>

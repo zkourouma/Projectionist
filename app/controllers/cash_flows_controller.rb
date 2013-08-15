@@ -2,6 +2,7 @@ class CashFlowsController < ApplicationController
 
   def new
     @quarters = new_quarter[1..-1]
+    @list_items = CashFlow.relevant
   end
 
   def create
@@ -11,17 +12,14 @@ class CashFlowsController < ApplicationController
     if @cashflow.save
       redirect_to user_company_url
     else
-      flash.notice = "Could not save balance sheet"
+      flash.notice = "Could not save cash flow"
       render :new
     end
   end
 
   def show
-    @user = current_user
     @quarters = new_quarter
     @company = current_user.company
-    @projects = @company.projects
-    @projects = nil if @projects.empty?
     @assumptions = @company.assumptions.select do |ass|
       CashFlow.relevant.has_key?(ass.metric_name.to_sym)
     end
@@ -44,6 +42,7 @@ class CashFlowsController < ApplicationController
     @cashflow = @company.cashflow
     @metric_tree = build_metric_tree(@company)
     @surplus = @metric_tree.length + 1
+    @full_statement = complete_statement?(@metric_tree, @year, @quarter, CashFlow.relevant)
   end
 
   def update
@@ -57,6 +56,7 @@ class CashFlowsController < ApplicationController
   end
 
   def add
+    @list_items = CashFlow.relevant
     render :add
   end
 
@@ -72,7 +72,6 @@ class CashFlowsController < ApplicationController
       render :add
     end
   end
-
 
   private
   def gen_item_list(cash_flow)

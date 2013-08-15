@@ -6,9 +6,9 @@
   <body>
     <%= render :partial => "shared/logoutheader" %>
 
-    <section class="income-edit group">
+    <section class="statement-show group">
       <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-      <article class="edit-IS-form group">
+      <article class="statement-content group">
         <h2>Edit IS Quarter</h2><br>
         <div class="quarter-picker group">
           <form action="<%= edit_user_company_income_statement_url %>" method="get">
@@ -18,108 +18,55 @@
             <label>
               Year<input type="number" name="year" value="<%= @year %>">
             </label>
-            <button type="submit" class="edit-income-button">Edit Q</button></form>
+            <input type="submit" value="Switch to Q"></form>
         </div>
-        <form action="<%= user_company_income_statement_url %>" method="post"
-          class="group" style="float:left;">
-          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-          <input type="hidden" name="_method" value="put">
-          <table>
-            <tr>
-              <th>Line item</th>
-            </tr>
-            <% @metric_tree.each_with_index do |(item, details), m_i| %>
-            <tr>
-              <% if details[@year][@quarter] %>
-                <td><%= item %></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= m_i %>][id]"
-                  value="<%= details[@year][@quarter].id %>"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= m_i %>][value]"
-                  value="<%= details[@year][@quarter].value %>"></td>
+        <div class="editing">
+          <form action="<%= user_company_income_statement_url %>" method="post"
+            class="group">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="hidden" name="_method" value="put">
+            <table>
+              <tr>
+                <th>Line item</th>
+              </tr>
+              <% @metric_tree.each_with_index do |(item, details), m_i| %>
+                <% next unless IncomeStatement.relevant.has_value?(item) %>
+                <tr>
+                  <% if details[@year][@quarter] %>
+                    <td><%= item %></td>
+                    <td><input type="hidden" name="income[metrics_attributes][<%= m_i %>][id]"
+                      value="<%= details[@year][@quarter].id %>"></td>
+                    <td><input type="text" name="income[metrics_attributes][<%= m_i %>][value]"
+                      value="<%= details[@year][@quarter].value %>"></td>
+                  <% end %>
+                </tr>
               <% end %>
-            </tr>
-            <% end %>
-            <tr>
-              <td><h2>Add to Q</h2></td>
-            </tr>
-            <tr>
-              <% unless @metric_tree["Revenue"][@year][@quarter] %>
-              <td>Revenue</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][name]"
-                  value="revs"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][year]"
-                  value="<%= @year %>"></td>
+              <% unless @full_statement %>
+                <tr>
+                  <td><h2>Add to Q</h2></td>
+                </tr>
+                <% IncomeStatement.relevant.each do |metric_name, name| %>
+                  <% unless @metric_tree[name][@year][@quarter] %>
+                    <tr>
+                      <td><%= name %></td>
+                      <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][name]" value="<%= metric_name %>"></td>
+                      <td><input type="text" name="income[metrics_attributes][<%= @surplus %>][value]"></td>
+                      <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][quarter]" value="<%= @quarter %>"></td>
+                      <td><input type="hidden" name="income[metrics_attributes][<%= @surplus %>][year]" value="<%= @year %>"></td>    
+                    </tr>
+                  <% end %>
+                <% end %>
               <% end %>
-            </tr>
-            <tr>
-              <% unless @metric_tree["Cost of Goods Sold"][@year][@quarter] %>
-                <td>Cost of Goods Sold</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 1 %>][name]"
-                  value="cogs"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus + 1 %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 1 %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 1 %>][year]"
-                  value="<%= @year %>"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <% unless @metric_tree["Research & Development"][@year][@quarter] %>
-                <td>Research & Development</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 3 %>][name]"
-                  value="rd"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus + 3 %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 3 %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 3 %>][year]"
-                  value="<%= @year %>"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <% unless @metric_tree["SG&A Expense"][@year][@quarter] %>
-                <td>SG&A Expense</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 4 %>][name]"
-                  value="sga"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus + 4 %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 4 %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 4 %>][year]"
-                  value="<%= @year %>"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <% unless @metric_tree["Interest Expense"][@year][@quarter] %>
-                <td>Interest Expense</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 5 %>][name]"
-                  value="interest"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus + 5 %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 5 %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 5 %>][year]"
-                  value="<%= @year %>"></td>
-              <% end %>
-            </tr>
-            <tr>
-              <% unless @metric_tree["Tax Expense"][@year][@quarter] %>
-                <td>Income Tax</td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 6 %>][name]"
-                  value="tax"></td>
-                <td><input type="text" name="income[metrics_attributes][<%= @surplus + 6 %>][value]"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 6 %>][quarter]"
-                  value="<%= @quarter %>"></td>
-                <td><input type="hidden" name="income[metrics_attributes][<%= @surplus + 6 %>][year]"
-                  value="<%= @year %>"></td>
-              <% end %>
-            </tr>
-          </table>
-          <input type="submit" value="Update">
-        </form>
+            </table>
+            <input type="submit" value="Update">
+          </form>
+        </div>
+        <div class="edit-nav">
+          <a href="<%= add_user_company_income_statement_url %>"
+            id="add_year_link">Add year</a><br>
+          <br><%= link_to "Back", :back %>
+        </div>
       </article>
-      <br><%= link_to "Back", :back %>
     </section>
-
   </body>
 </html>

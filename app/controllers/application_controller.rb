@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   protect_from_forgery
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :add_projects
 
   def after_sign_in_path_for(resource)
     user = current_user
@@ -28,5 +28,16 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource)
     "/"
+  end
+
+  def add_projects
+    @user = current_user
+    if @user
+      @company = @user.company
+      if @company
+        @projects = @company.projects
+        @projects = nil if @projects.empty?
+      end 
+    end
   end
 end
