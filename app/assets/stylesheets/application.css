@@ -52,6 +52,42 @@ a:hover{
   color: #DBAB1D;
 }
 
+button{
+  vertical-align: top;
+  color: rgba(52, 40, 153, 1);
+  background: rgba(203, 203, 203, .4);
+  padding: 10px;
+  border: 1px solid rgba(203, 203, 203, .6);
+  border-radius: 5px;
+  font-weight: bolder;
+}
+
+button:hover{
+  color: rgba(131, 111, 0, 1);
+  background: rgba(203, 203, 203, .4);
+  border: 1px solid rgba(150, 150, 150, .8);
+  cursor: pointer;
+}
+
+input[type='submit']{
+  vertical-align: top;
+  color: rgba(52, 40, 153, 1);
+  background: rgba(203, 203, 203, .4);
+  padding: 7px 10px;
+  border: 1px solid rgba(203, 203, 203, .6);
+  border-radius: 5px;
+  font-weight: bolder;
+  margin-top: 14px;
+}
+
+input[type='submit']:hover{
+  color: rgba(131, 111, 0, 1);
+  background: rgba(203, 203, 203, .4);
+  border: 1px solid rgba(150, 150, 150, .8);
+  cursor: pointer;
+}
+
+
 strong{
   color: #A58A39;
 }
