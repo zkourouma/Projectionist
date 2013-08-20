@@ -22,8 +22,8 @@ a1 = Assumption.create(value: 0.005, company_id: 1, metric_name: "cogs",
                         time_unit: "q", assumption_type: "growth")
 a2 = Assumption.create(value: 0.15, company_id: 1, metric_name: "sga",
                         time_unit:"y", assumption_type: "growth")
-a3 = Assumption.create(value: 100, company_id: 1, metric_name: "revs",
-                        time_unit: "q", assumption_type: "run_rate")
+# a3 = Assumption.create(value: 100, company_id: 1, metric_name: "revs",
+#                         time_unit: "q", assumption_type: "run_rate")
 
 i = IncomeStatement.create(:company_id => 1)
 b = BalanceSheet.create(:company_id => 1)

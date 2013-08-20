@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-
+include Warden::Test::Helpers
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
@@ -39,20 +39,26 @@ end
 
 def sign_up(email)
   visit "/user/sign_up"
-  fill_in "Email", with: email
-  fill_in "Password", with: 'password'
-  click_button 'Sign Up'
+  fill_in "user_email", with: email
+  fill_in "user_password", with: 'password'
+  fill_in "user_password_confirmation", with: 'password'
+  click_on 'Sign up'
 end
 
-def sign_up_as_charles
+def sign_up_charles
   sign_up("charles@google.com")
 end
 
-def sign_in(email='charles@google.com', password='password')
+def sign_in(email='charles@google.com')
   visit "/user/sign_in"
-  fill_in "Email", with: email
-  fill_in "Password", with: password
-  click_button 'Sign In'
+  fill_in "user_email", with: email
+  fill_in "user_password", with: 'password'
+  click_on 'Sign in'
+end
+
+def sign_in_charles
+  sign_up_charles
+  sign_in("charles@google.com")
 end
 
 def make_company(name="Google", hq="New York, NY")
@@ -62,7 +68,20 @@ def make_company(name="Google", hq="New York, NY")
   fill_in "Headquarters", with: hq
   fill_in "# of Employees", with: 39
   select 'Software', from: "Industries"
-  click_button ''
+  click_on 'Next'
+end
+
+def make_nonesense_with_charles
+  sign_in_charles
+  fill_in 'Name', with: 'Nonsense'
+  fill_in 'company[company_industries_attributes][0][industry_id]', with: 1
+  click_on 'Next'
+  fill_in 'income[metrics_attributes][0][value]', with: 100
+  click_on 'Next'
+  fill_in 'balance[metrics_attributes][0][value]', with: 1
+  click_on 'Next'
+  fill_in 'cashflow[metrics_attributes][0][value]', with: 1
+  click_on 'Complete'
 end
 
 def set_income_statement(company)
