@@ -26,6 +26,7 @@
 }
 
 .assumptions{
+  display: block;
   float: left;
   margin-bottom: 10px;
   padding-bottom: 10px;
@@ -63,6 +64,8 @@
 #chart_div{
   display: block;
   float: left;
+  width: 600px;
+  height: auto;
 }
 
 #new_project_button{
@@ -85,7 +88,7 @@
 }
 
 .pseudo-nav{
-
+  max-width: 500px;
 }
 
 .pseudo-nav > .financials {
@@ -96,7 +99,6 @@
 .edit-button{
 
 }
-
 
 .project-content{
   display:block;
@@ -111,11 +113,6 @@
 
 .project-content > .project-metrics > ul > li{
   padding: 5px;
-}
-
-#chart_div{
-  display: block;
-  float: left;
 }
 
 .show-assumptions > ul {

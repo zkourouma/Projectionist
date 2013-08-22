@@ -22,42 +22,47 @@
     <form action="<%= edit_user_project_url(@project) %>" method="get" style="float:right">
       <button type="submit" class="edit-project-button">Edit Project</button></form>
     <article class="project-content group">
-      <div class="project-metrics">
-        <span class="project-name"><%= @project.name %></span><br>
-        <% if @metrics %>
+      <span class="project-name"><strong>Name</strong> <%= @project.name %></span><br>
+      <br>      
+      <% if @metrics %>
+        <div class="project-metrics">
+          <strong>Baseline metrics</strong><br>
           <ul>
             <% @metrics.each do |metric| %>
               <li><%= metric.display_name %> <%= metric.value.round(1) %></li>
             <% end %>
           </ul>
-        <% end %>
-      </div>
-      <% if @assumptions %>
-      <div class="show-assumptions">
-        <ul>Assumptions<br>
-          <% @assumptions.each do |assume| %>
-            <% if assume.assumption_type == "growth" %>
-              <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %>
-                <%= assume.name %> growth</li>
-            <% else %>
-            <li>
-              <% if assume.value > 1.001 %>
-                $<%= assume.value %>mm in <%= assume.name %> per
-                <%= assume.time %>
-              <% else %>
-                <%= assume.value*100 %>% in <%= assume.name %> per
-                <%= assume.time %>
-              <% end %></li>
-            <% end %>
-          <% end %>
-        </ul>
-      </div>
+        </div>
       <% end %>
-      <div id="chart_div">
-      </div>
+
+      <% unless @assumptions.empty? %>
+        <div class="show-assumptions">
+          <strong>Assumptions</strong><br>
+          <ul>
+            <% @assumptions.each do |assume| %>
+              <% if assume.assumption_type == "growth" %>
+                <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %>
+                  <%= assume.name %> growth</li>
+              <% else %>
+              <li>
+                <% if assume.value > 1.001 %>
+                  $<%= assume.value %>mm in <%= assume.name %> per
+                  <%= assume.time %>
+                <% else %>
+                  <%= assume.value*100 %>% in <%= assume.name %> per
+                  <%= assume.time %>
+                <% end %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <hr>
+      <div id="chart_div"></div>
+
       <div class="financials">
+        Company Financials<br>
         <ul>
-          <li>Company Financials</li>
           <li><%= link_to "Income Statement", user_company_income_statement_url %></li>
           <li><%= link_to "Balance Sheet", user_company_balance_sheet_url %></li>
           <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>
