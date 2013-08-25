@@ -53,14 +53,19 @@ class ProjectsController < ApplicationController
     @assumptions, @metrics = @project.assumptions, @project.metrics
     @start_time = new_quarter.first
     gon.data = data_cleanse(@metrics)
+    @impact = @project.project_impact(@metrics, build_metric_tree(@company))
     @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
   end
 
   def data_cleanse(metrics)
+#   Converts the metric tree into an array of arrays that is more JS friendly
+#   for the chart
     depth = metrics.map{|m| m.quarter }.uniq.length + 1
     data = Array.new(depth, Array.new)
+    
     prehash = Hash.new
     prehash[:headers] = ['Quarter']
+    
     metrics.each do |m|
       prehash[:headers] << m.display_name unless prehash[:headers].include?(m.display_name)
       prehash[m.quarter]||= ["#{m.quarter}Q#{m.year}"]

@@ -1,4 +1,3 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
@@ -17,17 +16,10 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
   config.use_transactional_fixtures = true
 
-  # If true, the base class of anonymous controllers will be inferred
-  # automatically. This will be the default behavior in future versions of
-  # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
   # Run specs in random order to surface order dependencies. If you find an
@@ -84,14 +76,20 @@ def make_nonesense_with_charles
   click_on 'Complete'
 end
 
-def set_income_statement(company)
-  
-end
-
-def set_balance_sheet(company)
-  
-end
-
-def set_cash_flow(company)
-  
+def build_tree
+  results = Hash.new do |hash, key|
+    hash[key] = Hash.new do |hash, key|
+      hash[key] = Hash.new
+    end
+  end
+  yr = Date.today.strftime("%Y").to_i
+  list = IncomeStatement.relevant.merge(BalanceSheet.relevant).merge(CashFlow.relevant)  
+  list.each do |metric, metric_name|
+#     Basic structure of the tree to access a specific metric
+    4.times do |q|
+      results[metric_name][yr][q + 1] = Metric.new(
+        name: metric, quarter: q, year: yr, value: (100 * (q + 1)))
+    end
+  end
+  results
 end

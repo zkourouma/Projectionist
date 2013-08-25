@@ -100,7 +100,7 @@
           </tr>
         </table>
       </div>
-      <% if @assumptions %>
+      <% unless @assumptions.empty? %>
       <div class="assumptions">
         <ul><strong>Assumptions</strong><br>
           <% @assumptions.each do |assume| %>

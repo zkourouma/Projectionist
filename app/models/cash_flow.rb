@@ -9,7 +9,8 @@ class CashFlow < ActiveRecord::Base
     i = company.income
     ebitda = i.ebitda(tree, quarter, year)
     b = company.balance
-    working_delta = b.working_capital(tree, quarter, year) - b.working_capital(tree, quarter, year - 1)
+    working_delta = b.working_capital(tree, quarter, year) - 
+                      b.working_capital(tree, quarter, year - 1)
     ebitda - working_delta
   end
 
@@ -18,7 +19,6 @@ class CashFlow < ActiveRecord::Base
   end
 
   def free_cash_per_share(tree, quarter, year)
-    b_id = company.balance.id
     commons = sanitize(tree, "Common Shares", year, quarter)
     treasuries = sanitize(tree, "Treasury Shares", year, quarter)
     preferreds = sanitize(tree, "Preferred Shares", year, quarter)
@@ -40,10 +40,10 @@ class CashFlow < ActiveRecord::Base
   end
 
   def delta_liabilities(tree, quarter, year)
-    std_this = sanitize(tree, "Short-Term  Debt", year, quarter)
+    std_this = sanitize(tree, "Short-Term Debt", year, quarter)
     std_that = sanitize(tree, "Short-Term Debt", year-1, quarter)
-    
-    ltd_this = sanitize(tree, "Long-Term  Debt", year, quarter)
+
+    ltd_this = sanitize(tree, "Long-Term Debt", year, quarter)
     ltd_that = sanitize(tree, "Long-Term Debt", year-1, quarter)
 
     pay_this = sanitize(tree, "Accounts Payable", year, quarter)

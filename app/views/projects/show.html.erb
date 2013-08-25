@@ -22,7 +22,7 @@
     <form action="<%= edit_user_project_url(@project) %>" method="get" style="float:right">
       <button type="submit" class="edit-project-button">Edit Project</button></form>
     <article class="project-content group">
-      <span class="project-name"><strong>Name</strong> <%= @project.name %></span><br>
+      <span class="project-name"><strong>Name</strong><br> <%= @project.name %></span><br>
       <br>      
       <% if @metrics %>
         <div class="project-metrics">

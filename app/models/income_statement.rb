@@ -17,8 +17,6 @@ class IncomeStatement < ActiveRecord::Base
   end
 
   def operating_profit(tree, quarter, year)
-    cf_id = company.cashflow.id
-    b_id = company.balance.id
     dep = sanitize(tree, "Depreciation", year, quarter)
     amor = sanitize(tree, "Amortization", year, quarter)
     gross_profit(tree, quarter, year) - opex(tree, quarter, year) -
@@ -32,7 +30,6 @@ class IncomeStatement < ActiveRecord::Base
 
   def ebitda(tree, quarter, year)
     eb = operating_profit(tree, quarter, year)
-    cf_id, b_id = company.cashflow.id, company.balance.id
     dep = sanitize(tree, "Depreciation", year, quarter)
     amor = sanitize(tree, "Amortization", year, quarter)
 
