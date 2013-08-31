@@ -3,7 +3,6 @@ class RegistrationsController < Devise::RegistrationsController
     @user = current_user
     @company = @user.company
     @projects = @company.projects
-    p @projects
     super
   end
 

@@ -93,17 +93,34 @@ strong{
   color: #A58A39;
 }
 .login {
-  width:90%;
+  width: 100%;
   margin:auto;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 3px solid #ccc;
+  background: #0D0D64;
+}
+
+.login a {
+  color: #EDD17E;
+  padding-left: 50px;
+}
+
+.login a:hover{
+  color: #EDC754;
+}
+
+.login button{
+  margin: 20px;
+  color: #EDD17E;
 }
 
 .sidebar{
-  display: block;
   float: left;
   width: 150px;
   height: 100%;
   list-style: none;
+  padding-left: 50px;
+  padding-top: 20px;
+  /*background: #ccc;*/
 }
 
 .sidebar > li:hover{

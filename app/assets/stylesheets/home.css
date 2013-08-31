@@ -1,15 +1,35 @@
 .login-header{
-  display: block;
-  border-bottom: 1px solid #ccc;
-  margin: 10px auto;
+  border-bottom: 3px solid #ccc;
+  margin: auto;
+  margin-bottom: 10px;
+  width: 100%; 
+  background: #0D0D64;
+}
+
+.login-header > h2 > a{
+  color: #EDD17E;
+}
+
+.login-header > h2 > a:hover{
+  color: #EDC754;
+}
+
+.login-header > h3 > a{
+  color: #EDD17E;
+}
+
+.login-header > h3 > a:hover{
+  color: #EDC754;
 }
 
 .login-header > h2{
   float: left;
+  padding-left: 50px;
 }
 
 .login-header > h3{
   float: right;
+  padding-right: 50px;
 }
 
 #fake-chart{

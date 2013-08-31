@@ -4,11 +4,11 @@
 </head>
 
 <body>
+  <header class="login-header group">
+    <h2><a href="/">Projectionist</a></h2>
+    <h3><a href="<%= new_user_registration_url %>">Sign Up</a></h3>
+  </header>
   <section class="landing">
-    <header class="login-header group">
-      <h2><a href="/">Projectionist</a></h2>
-      <h3><a href="<%= new_user_registration_url %>">Sign Up</a></h3>
-    </header>
     <div class="user-form">
       <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
         <div><%= f.label :email %><br />
