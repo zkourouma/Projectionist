@@ -6,8 +6,10 @@
     var data = google.visualization.arrayToDataTable( gon.data );
 
     var options = {
-      title: 'Project Metrics',
-      hAxis: {title: 'Quarter', titleTextStyle: {color: 'red'}}
+      title: 'Project Impact vs. Last Quarter',
+      hAxis: {title: 'Metric', titleTextStyle: {color: 'red'}, 
+              minTextSpacing: 5},
+      vAxis: {title: 'Percent Changed', titleTextStyle: {color: 'blue'}}
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));

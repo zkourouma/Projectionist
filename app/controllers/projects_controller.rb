@@ -51,10 +51,18 @@ class ProjectsController < ApplicationController
     @company = @user.company
     @projects = @company.projects
     @assumptions, @metrics = @project.assumptions, @project.metrics
-    @start_time = new_quarter.first
-    gon.data = data_cleanse(@metrics)
     @impact = @project.project_impact(@metrics, build_metric_tree(@company))
+    gon.data = impact_data(@impact)
+    p @impact
     @list = @@assumption_list.map{|ass| Assumption.new(metric_name: ass)}
+  end
+
+  def impact_data(metrics)
+    data = [["Metric", "Percent Changed"]]
+    metrics.each do |metric, change|
+      data << [metric, change]
+    end
+    data
   end
 
   def data_cleanse(metrics)
