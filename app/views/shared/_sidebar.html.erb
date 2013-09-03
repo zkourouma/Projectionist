@@ -1,7 +1,7 @@
 <ul class="sidebar group">
     <div class="projects-index">
     <% unless projects.nil? %>
-      Projects
+      <strong>Projects</strong>
       <ul>
         <% projects.each do |project| %>
           <li><%= link_to project.name, user_project_url(project) %></li>

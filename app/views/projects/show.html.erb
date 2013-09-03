@@ -19,8 +19,8 @@
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
+  <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
   <section class="project-show group">
-    <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
     <form action="<%= edit_user_project_url(@project) %>" method="get" style="float:right">
       <button type="submit" class="edit-project-button">Edit Project</button></form>
     <article class="project-content group">

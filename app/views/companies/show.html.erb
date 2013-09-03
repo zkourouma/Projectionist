@@ -8,21 +8,21 @@
       <button type="submit" class="new-project-button">Create New Project</button></form>
     <article class="company-content group">
       <div class="company-facts">
-        <div class="facts">Name: <%= @company.name %></div><br>
-        <div class="facts">HQ: <%= @company.headquarters %></div><br>
+        <div class="facts"><strong>Name:</strong> <%= @company.name %></div><br>
+        <div class="facts"><strong>HQ:</strong> <%= @company.headquarters %></div><br>
         <% if @company.industries %>
-        Industries:<br>
-        <ul class="company-industries">
-          <% @company.industries.each do |industry| %>
-            <li><%= industry.name %></li>
-          <% end %>
-        </ul>
+          <strong>Industries:</strong><br>
+          <ul class="company-industries">
+            <% @company.industries.each do |industry| %>
+              <li><%= industry.name %></li>
+            <% end %>
+          </ul>
         <% end %>
-        <div class="facts">Employees: <%= @company.employees %></div>
+        <div class="facts"><strong>Employees:</strong> <%= @company.employees %></div>
       </div>
       <% if @assumptions %>
       <div class="assumptions">
-        <ul>Assumptions<br>
+        <ul><strong>Assumptions</strong><br>
           <% @assumptions.each do |assume| %>
             <% if assume.assumption_type == "growth" %>
               <li> <%= assume.value*100 %>% <%= assume.time_unit %>/<%= assume.time_unit %>
@@ -42,7 +42,7 @@
       </div>
       <% end %>
       <div class="financials">
-        Financials<br>
+        <strong>Financials</strong><br>
         <ul>
           <li><a href="<%= user_company_income_statement_url %>">
             Income Statement</a></li>

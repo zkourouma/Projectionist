@@ -28,6 +28,10 @@ body, header, section, article, div, ul, li, a{
   color: #0D0D64;
 }
 
+body{
+  min-width: 1000px;
+}
+
 section{
   width: 90%;
   margin: 20px auto;
@@ -56,7 +60,7 @@ a:hover{
 button{
   vertical-align: top;
   color: rgba(52, 40, 153, 1);
-  background: rgba(203, 203, 203, .4);
+  background: rgba(203, 203, 203, .6);
   padding: 7px 10px;
   border: 1px solid rgba(203, 203, 203, .6);
   border-radius: 5px;
@@ -64,7 +68,7 @@ button{
 }
 
 button:hover{
-  color: rgba(131, 111, 0, 1);
+  color: rgba(226, 209, 122, 1);
   background: rgba(203, 203, 203, .4);
   border: 1px solid rgba(150, 150, 150, .8);
   cursor: pointer;
@@ -116,39 +120,40 @@ strong{
 .sidebar{
   float: left;
   width: 150px;
-  height: 100%;
   list-style: none;
-  padding-left: 50px;
-  padding-top: 20px;
-  /*background: #ccc;*/
+  margin-left: 20px;
+  padding-top: 50px;
 }
 
-.sidebar > li:hover{
-  background: #ccc;
+.sidebar li:hover{
+  background: rgba(203, 203, 203, .4);
 }
-.sidebar > li > a{
+.sidebar li a{
   padding: 0 25px 0 0;
 }
 
-.sidebar > .projects-index > ul{
+.sidebar .projects-index ul{
   margin-bottom: 7px;
 }
 
-.sidebar > .projects-index > ul > li{
+.sidebar .projects-index ul{
+  display: none;
+}
+
+.sidebar .projects-index:hover ul{
+  display: inline;
   list-style: none;
   width: 100%;
 }
 
-.sidebar > .projects-index > ul > li > a{
+.sidebar .projects-index ul li a{
   padding: 0 50px 0 10px;
 }
 
-.sidebar > .projects-index > ul > li:hover{
-  background: #ccc;
+.sidebar .projects-index ul li:hover{
+  background: rgba(203, 203, 203, .4);
 }
-.sidebar > .projects-index > a{
+
+.sidebar .projects-index a{
   padding-right: 67px;
-}
-.sidebar > .projects-index > a:hover{
-  background: #ccc;
 }

@@ -29,8 +29,8 @@
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
+  <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
   <section class="statement-show group">
-    <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
     <form action="<%= new_user_project_url %>" method="get">
       <button type="submit" id="new_project_button">Create New Project</button>
     </form>
