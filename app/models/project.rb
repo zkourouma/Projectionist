@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
         end
 
         current_metric = metric_tree[metric.display_name][yr][quarter]
-        percent_change = (current_metric.value - metric.value)/current_metric.value
+        percent_change = ((current_metric.value - metric.value).abs)/current_metric.value
         impact[metric.display_name] = percent_change.round(4)*100
       end
     end
