@@ -8,7 +8,7 @@
 
     <section class="statement-show group">
       <%= render :partial => 'shared/sidebar', locals: {projects: @projects} %>
-      <div class="statement-content group">
+      <article class="statement-content group">
         <h2>Add to Cash Flow</h2><br>
         <div class="editing">
           <form action="<%= add_year_user_company_cash_flow_url %>" method="post">
@@ -25,27 +25,31 @@
                   <th><%= "#{i + 1}Q" %></th>
                 <% end %>
               </tr>
-                <% @list_items.each_with_index do |(metric_name, name), i| %>
+              <% x = 0 %>
+              <% @list_items.each_with_index do |(metric_name, name), i| %>
                 <tr>
                   <td><%= name %></td>
                   <% 4.times do |j| %>
-                    <td><input type="hidden" name="cashflow[metrics_attributes][<%= i + j %>][name]"
-                      value="<%= metric_name %>"></td>
-                    <td><input type="hidden" 
-                      name="cashflow[metrics_attributes][<%= i + j %>][quarter]"
-                      value="<%= j + 1 %>"></td>
                     <td>
-                      <input type="text" name="cashflow[metrics_attributes][<%= i + j %>][value]">
+                      <input type="hidden" name="cashflow[metrics_attributes][<%= i + x %>][name]"
+                        value="<%= metric_name %>"></td>
+                    <td>
+                      <input type="hidden" 
+                        name="cashflow[metrics_attributes][<%= i + x %>][quarter]"
+                        value="<%= j + 1 %>"></td>
+                    <td>
+                      <input type="text" name="cashflow[metrics_attributes][<%= i + x %>][value]">
                     </td>
+                    <% x += 1 %>
                   <% end %>
                 </tr>
               <% end %>
             </table>
-            <input type="submit" value="Add">
+            <input type="submit" value="Add Year">
           </form>
         </div>
-      </div>
-      <br><%= link_to "Back", :back %>
+        <br><%= link_to "Back", :back %>
+      </article>
     </section>
   </body>
 </html>

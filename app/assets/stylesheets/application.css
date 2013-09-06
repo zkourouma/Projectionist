@@ -28,13 +28,10 @@ body, header, section, article, div, ul, li, a{
   color: #0D0D64;
 }
 
-body{
-  min-width: 1000px;
-}
-
 section{
-  width: 90%;
+  width: 95%;
   margin: 20px auto;
+  min-width: 1000px;
 }
 
 

@@ -25,18 +25,20 @@
                   <th><%= "#{i + 1}Q" %></th>
                 <% end %>
               </tr>
+              <% x = 0 %>
               <% @list_items.each_with_index do |(metric_name, name), i| %>
                 <tr>
                   <td><%= name %></td>
                   <% 4.times do |j| %>
                     <td>
-                      <input type="hidden" name="income[metrics_attributes][<%= (i + j) %>][name]"
-                      value="<%= metric_name %>"></td>
+                      <input type="hidden" name="income[metrics_attributes][<%= i + x %>][name]"
+                        value="<%= metric_name %>"></td>
                     <td>
-                      <input type="hidden" name="income[metrics_attributes][<%= (i + j) %>][quarter]" value="<%= (j + 1) %>"></td>
+                      <input type="hidden" name="income[metrics_attributes][<%= i + x %>][quarter]"   value="<%= j + 1 %>"></td>
                     <td>
-                      <input type="text" name="income[metrics_attributes][<%= (i + j) %>][value]">
+                      <input type="text" name="income[metrics_attributes][<%= i + x %>][value]">
                     </td>
+                    <% x += 1 %>
                 <% end %>
                 </tr>
               <% end %>
@@ -44,12 +46,7 @@
             <input type="submit" value="Add Year">
           </form>
         </div>
-        <div class="edit-nav">
-          <a href="<%= add_user_company_income_statement_url %>"
-            id="add_year_link">Add year</a><br>
-
-          <br><%= link_to "Back", :back %>
-        </div>
+        <br><%= link_to "Back", :back %>
       </article>
     </section>
   </body>
