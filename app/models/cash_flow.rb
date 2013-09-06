@@ -5,6 +5,13 @@ class CashFlow < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
+  @operations_list = [:operating_cash_flow, :free_cash_flow, :free_cash_flow_per_share,
+    :delta_receivables, :delta_inventory, :delta_liabilities, :capex]
+
+  @relevant = {depreciation:"Depreciation", investments: "Investments",
+    divs_paid: "Dividends Paid", stock_financing: "Stock Financing",
+    debt_financing: "Net Borrowings"}
+
   def operating_cash_flow(tree, quarter, year)
     i = company.income
     ebitda = i.ebitda(tree, quarter, year)
@@ -67,13 +74,10 @@ class CashFlow < ActiveRecord::Base
   end
 
   def self.relevant
-    @@relevant
+    @relevant
   end
 
-  @@operations_list = [:operating_cash_flow, :free_cash_flow, :free_cash_flow_per_share,
-    :delta_receivables, :delta_inventory, :delta_liabilities, :capex]
-
-  @@relevant = {depreciation:"Depreciation", investments: "Investments",
-    divs_paid: "Dividends Paid", stock_financing: "Stock Financing",
-    debt_financing: "Net Borrowings"}
+  def self.operations
+    @operations_list
+  end
 end

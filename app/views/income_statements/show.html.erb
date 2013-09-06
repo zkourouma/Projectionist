@@ -98,6 +98,24 @@
               <td><%= @income.eps(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
+          <tr>
+            <td>Gross Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= @income.gross_margin(@metric_tree, q[0], q[1]).round(1) %></td>
+            <% end %>
+          </tr>
+          <tr>
+            <td>Operating Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= @income.operating_margin(@metric_tree, q[0], q[1]).round(1) %></td>
+            <% end %>
+          </tr>
+          <tr>
+            <td>EBTIDA Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= @income.ebitda_margin(@metric_tree, q[0], q[1]).round(1) %></td>
+            <% end %>
+          </tr>
         </table>
       </div>
       <% unless @assumptions.empty? %>
