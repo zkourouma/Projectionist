@@ -61,10 +61,19 @@ class IncomeStatementsController < ApplicationController
   end
 
   def add_year
-    @income = current_user.company.income
-    params[:income][:metrics_attributes].each do |metric, value|
-      value[:year] = params[:set_year].to_i
+    @company = current_user.company
+    @income = @company.income
+    @metric_tree = build_metric_tree(@company)
+    params[:income][:metrics_attributes].each do |metric_num, new_met|
+      new_met[:year] = params[:set_year].to_i
+      p new_met
+      next if new_met[:value].blank?
+      metric_details = {name: new_met[:name], year: new_met[:year], 
+                      quarter: new_met[:quarter], statementable_type: "IncomeStatement",
+                      statementable_id: @income.id}
+      remove_dup(Metric.new(metric_details), build_metric_tree(@company))
     end
+
     if @income.update_attributes(params[:income])
       redirect_to user_company_income_statement_url
     else

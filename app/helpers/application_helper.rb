@@ -333,4 +333,16 @@ module ApplicationHelper
     year.each{|q, m| avg+= m.value; counter += 1}
     avg / counter
   end
+
+  def remove_dup(metric, metric_tree)
+    name, year, quarter = metric.display_name, metric.year, metric.quarter
+    p name
+    if metric_tree[name][year][quarter]
+      met = Metric.where(name: metric.name, year: year, quarter: quarter,
+                statementable_type: metric.statementable_type,
+                statementable_id: metric.statementable_id)[0]
+      p met 
+      met.destroy
+    end
+  end
 end

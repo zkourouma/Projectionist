@@ -30,12 +30,12 @@
                   <td><%= name %></td>
                   <% 4.times do |j| %>
                     <td>
-                      <input type="hidden" name="income[metrics_attributes][<%= i + j %>][name]"
+                      <input type="hidden" name="income[metrics_attributes][<%= (i + j) %>][name]"
                       value="<%= metric_name %>"></td>
                     <td>
-                      <input type="hidden" name="income[metrics_attributes][<%= i + j %>][quarter]" value="<%= j + 1 %>"></td>
+                      <input type="hidden" name="income[metrics_attributes][<%= (i + j) %>][quarter]" value="<%= (j + 1) %>"></td>
                     <td>
-                      <input type="text" name="income[metrics_attributes][<%= i + j %>][value]">
+                      <input type="text" name="income[metrics_attributes][<%= (i + j) %>][value]">
                     </td>
                 <% end %>
                 </tr>
