@@ -10,7 +10,7 @@
   <%= include_gon %>
 </head>
 <body>
-<% if (notice || alert) && (flash.none(&:blank?)) %>
+<% if (notice || alert) %>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
 <% end %>

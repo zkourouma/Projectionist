@@ -1,31 +1,31 @@
 <head>
 <script type="text/javascript">
-      function drawVisualization() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Quarter');
+  function drawVisualization() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Quarter');
 
-        gon.columns.forEach(function(item, index, array) {
-          if(index % 2 === 0){
-            data.addColumn(item[0], item[1]);
-          }
-          else{
-            data.addColumn({type: item[0], role: item[1]});
-          }
-        });
-        
-        data.addRows(gon.details);        
-
-        var options = {
-          title : 'Income Statement',
-          hAxis: {title: "Quarter"},
-          seriesType: "bars"
-        };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+    gon.columns.forEach(function(item, index, array) {
+      if(index % 2 === 0){
+        data.addColumn(item[0], item[1]);
       }
-      google.setOnLoadCallback(drawVisualization);
-    </script>
+      else{
+        data.addColumn({type: item[0], role: item[1]});
+      }
+    });
+    
+    data.addRows(gon.details);        
+
+    var options = {
+      title : 'Income Statement',
+      hAxis: {title: "Quarter"},
+      seriesType: "bars"
+    };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+  google.setOnLoadCallback(drawVisualization);
+</script>
 </head>
 <body>
   <%= render :partial => 'shared/logoutheader' %>
@@ -95,7 +95,25 @@
           <tr>
             <td>EPS</td>
             <% @quarters.each_with_index do |q, q_i| %>
-              <td><%= @income.eps(@metric_tree, q[0], q[1]).round(1) %></td>
+              <td><%= @income.eps(@metric_tree, q[0], q[1]).round(2) %></td>
+            <% end %>
+          </tr>
+          <tr>
+            <td>Gross Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= (@income.gross_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
+            <% end %>
+          </tr>
+          <tr>
+            <td>Operating Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= (@income.operating_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
+            <% end %>
+          </tr>
+          <tr>
+            <td>EBITDA Margin</td>
+            <% @quarters.each_with_index do |q, q_i| %>
+              <td><%= (@income.ebitda_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
             <% end %>
           </tr>
         </table>
@@ -133,7 +151,7 @@
           <input type="submit" value="Edit Q" style='margin-top:-2px'></form><br>
 
         <div class="financials">
-          Financials<br>
+          <strong>Financials</strong><br>
           <ul>
             <li><%= link_to "Balance Sheet", user_company_balance_sheet_url %></li>
             <li><%= link_to "Cash Flow Statement", user_company_cash_flow_url %></li>

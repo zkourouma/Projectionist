@@ -5,6 +5,14 @@ class IncomeStatement < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
+  @operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
+        :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
+
+  @relevant = {revs:"Revenue", cogs: "Cost of Goods Sold", sga: "SG&A Expense",
+    rd: "Research & Development", interest: "Interest Expense",
+     tax: "Tax Expense"}
+
+
   def gross_profit(tree, quarter, year)
     revs = sanitize(tree, "Revenue", year, quarter)
     cogs = sanitize(tree, "Cost of Goods Sold", year, quarter)
@@ -95,20 +103,17 @@ class IncomeStatement < ActiveRecord::Base
 
   def sanitize(tree, name, year, quarter)
     if tree[name][year][quarter]
-      tree[name][year][quarter].value
+      tree[name][year][quarter].value.to_f
     else
-      0
+      0.0
     end
   end
 
   def self.relevant
-    @@relevant
+    @relevant
   end
 
-  @@operations_list = [:gross_profit, :operating_profit, :ebitda, :net_income,
-        :eps, :opex, :gross_margin, :operating_margin, :ebitda_margin]
-
-  @@relevant = {revs:"Revenue", cogs: "Cost of Goods Sold", sga: "SG&A Expense",
-    rd: "Research & Development", interest: "Interest Expense",
-     tax: "Tax Expense"}
+  def self.operations
+    @operations_list
+  end
 end

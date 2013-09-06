@@ -5,6 +5,18 @@ class BalanceSheet < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
+  @operations_list = [:debt_to_equity, :cash_per_share, :current_ratio, :book_value,
+        :capex, :working_capital]
+
+  @relevant = {cash:"Cash", receivables: "Accounts Receivable",
+    inventory: "Inventory", lti: "Long-Term Investments", ppe: "Property, Plant & Equipment",
+    goodwill: "Goodwill", amortization: "Amortization", payables: "Accounts Payable",
+    std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
+    common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
+    preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
+    treasury_quantity: "Treasury Shares"}
+
+
   def debt_to_equity(tree, quarter, year)
     std = sanitize(tree, "Short-Term Debt", year, quarter)
     ltd = sanitize(tree, "Long-Term Debt", year, quarter)
@@ -105,10 +117,6 @@ class BalanceSheet < ActiveRecord::Base
     assets - liabilities
   end
 
-  def self.relevant
-    @@relevant
-  end
-
   def sanitize(tree, name, year, quarter)
     if tree[name][year][quarter]
       tree[name][year][quarter].value
@@ -117,14 +125,12 @@ class BalanceSheet < ActiveRecord::Base
     end
   end
 
-  @@operations_list = [:debt_to_equity, :cash_per_share, :current_ratio, :book_value,
-        :capex, :working_capital]
+  def self.relevant
+    @relevant
+  end
 
-  @@relevant = {cash:"Cash", receivables: "Accounts Receivable",
-    inventory: "Inventory", lti: "Long-Term Investments", ppe: "Property, Plant & Equipment",
-    goodwill: "Goodwill", amortization: "Amortization", payables: "Accounts Payable",
-    std: "Short-Term Debt", ltd: "Long-Term Debt", common_price: "Common Share Price",
-    common_quantity: "Common Shares", preferred_price: "Preferred Share Price",
-    preferred_quantity: "Preferred Shares", treasury_price: "Treasury Share Price",
-    treasury_quantity: "Treasury Shares"}
+  def self.operations
+    @operations_list
+  end
+
 end
