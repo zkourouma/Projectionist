@@ -36,13 +36,14 @@ class Project < ActiveRecord::Base
         current_metric = metric_tree[metric.display_name][yr][quarter]
         percent_change = (current_metric.value - metric.value)/current_metric.value
         impact[metric.display_name] = percent_change.round(4)*100
-        operation_impact(metric_tree, metric, yr, quarter, impact)
+        impact.merge!(operation_impact(metric_tree, metric, yr, quarter))
       end
     end
     impact
   end
 
-  def operation_impact(metric_tree, metric, yr, quarter, impact_hash)
+  def operation_impact(metric_tree, metric, yr, quarter)
+    impact_hash = Hash.new
     op_list = find_operations(metric)
     op_list.each do |operation, display_name|
         statements.each do |statement|
