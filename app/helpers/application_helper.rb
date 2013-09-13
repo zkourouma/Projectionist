@@ -333,4 +333,20 @@ module ApplicationHelper
     year.each{|q, m| avg+= m.value; counter += 1}
     avg / counter
   end
+
+  def tree_dup(tree)
+    new_tree = Hash.new do |hash, key|
+      hash[key] = Hash.new do |hash, key|
+        hash[key] = Hash.new
+      end
+    end
+
+    tree.each do |metric_name, years|
+      years.each do |year, quarters|
+        quarters.each do |quarter, metric|
+          tree[metric_name][year][quarter] = metric.clone
+        end
+      end
+    end
+  end
 end

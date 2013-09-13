@@ -9,6 +9,12 @@ class Project < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
+
+  @@implicated_operations = {IncomeStatement: IncomeStatement.relevant,
+                      BalanceSheet: BalanceSheet.relevant,
+                      CashFlow: CashFlow.relevant}
+
+  @@statements = [IncomeStatement, BalanceSheet, CashFlow]
   
   def project_impact(metrics, metric_tree)
     impact = Hash.new
@@ -30,7 +36,7 @@ class Project < ActiveRecord::Base
         current_metric = metric_tree[metric.display_name][yr][quarter]
         percent_change = (current_metric.value - metric.value)/current_metric.value
         impact[metric.display_name] = percent_change.round(4)*100
-        operation_impacts(metric_tree, metric, yr, quarter, impact)
+        operation_impact(metric_tree, metric, yr, quarter, impact)
       end
     end
     impact
@@ -42,12 +48,20 @@ class Project < ActiveRecord::Base
         statements.each do |statement|
           if statement.respond_to?(operation)
             impact_hash[display_name] = get_impact(metric_tree, metric, operation, statement, yr, quarter)
-        end  
+        end
+      end
     end
+    impact_hash
   end
 
-  def get_impact(metric_tree, metric, operation, statement, yr, quarter)
-    pre_proj = statement.send(operation, [metric_tree, quarter, yr, metric])
+  def get_impact(metric_tree, metric, operation, statement, year, quarter)
+    current_metric = metric_tree[metric.display_name][year][quarter]
+    new_metric = current_metric.incorporate(metric)
+    tree_copy = tree_dup(metric_tree)
+    tree_copy[metric.display_name][year][quarter] = metric
+    pre_project = statement.send(operation, [metric_tree, year, quarter])
+    post_project = statement.send(operation, [tree_copy, year, quarter])
+    ((pre_project - post_project)/pre_project).round(4)*100
   end
 
   def find_operations(metric)
@@ -65,16 +79,10 @@ class Project < ActiveRecord::Base
   end
 
   def implicated
-    @implicated_operations
+    @@implicated_operations
   end
 
   def statements
-    @statements
+    @@statements
   end
-
-  @implicated_operations = {IncomeStatement: IncomeStatement.relevant,
-                      BalanceSheet: BalanceSheet.relevant,
-                      CashFlow: CashFlow.relevant}
-
-  @statements = [IncomeStatement, BalanceSheet, CashFlow]
 end

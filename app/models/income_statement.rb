@@ -5,7 +5,7 @@ class IncomeStatement < ActiveRecord::Base
   has_many :metrics, as: :statementable
   accepts_nested_attributes_for :metrics, reject_if: proc { |att| att['value'].blank? }
 
-  @operations_list = {"Revenue" => [gross_profit: "Gross Profit",
+  @@operations_list = {"Revenue" => [gross_profit: "Gross Profit",
                                     operating_profit: "Operating Profit",
                                     ebitda: "EBITDA", net_income: "Net Income",
                                     eps: "EPS", gross_margin: "Gross Margin",
@@ -29,7 +29,7 @@ class IncomeStatement < ActiveRecord::Base
                                               eps: "EPS"],
                         "Tax Expense" => [net_income: "Net Income", eps: "EPS"]}
 
-  @relevant = {revs:"Revenue", cogs: "Cost of Goods Sold", sga: "SG&A Expense",
+  @@relevant = {revs:"Revenue", cogs: "Cost of Goods Sold", sga: "SG&A Expense",
     rd: "Research & Development", interest: "Interest Expense",
      tax: "Tax Expense"}
 
@@ -130,10 +130,10 @@ class IncomeStatement < ActiveRecord::Base
   end
 
   def self.relevant
-    @relevant
+    @@relevant
   end
 
   def self.operations
-    @operations_list
+    @@operations_list
   end
 end
