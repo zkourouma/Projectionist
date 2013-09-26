@@ -74,16 +74,21 @@ module ApplicationHelper
     metric_tree.each do |metric, years|
       ass = assumptions.select{|e| e.name == metric}
       ending = Date.today.strftime('%Y').to_i
+      
       until years[ending]
+#       Find the most recent year with a data point
         ending -= 1
       end
       start = ending - 1
+      
       if !ass.empty?
 #       If there are any relevant assumptions for the metric
         results[metric] = assumed(ass, years[start], years[ending])
       elsif years.length == 1
+#       Forecast using one year of data
         results[metric] = single_year(years.first[0], years.first[1])
       else
+#       Forecast using two years of data
         results[metric] = year_over_year(years[start], years[ending])
       end
     end
@@ -95,11 +100,12 @@ module ApplicationHelper
       hash[key] = Hash.new
     end
 #   Details for the estimated metrics
-    era = year_two.first.last.year + 1
+    era = year_two.first.last.year + 1 # One year after the most recent one
     stat_id = year_two.first.last.statementable_id
     stat_type = year_two.first.last.statementable_type
-    nombre = year_two.first.last.name
+    nombre = year_two.first.last.name # Name of the metric
     
+#   If the recent year is incomplete, then fill the values with estimates
     year_two.merge!(assumed_filler(assumptions, year_one, year_two)){|key, v1, v2| v1 } if year_two.length < 4
     
     4.times do |i|
@@ -145,6 +151,7 @@ module ApplicationHelper
       hash[key] = Hash.new
     end
 
+#   Use a single years metrics and assume no growth
     quarters.each do |quarter, metric|
         results[year + 1][quarter] = Metric.
             new(statementable_id: metric.statementable_id, statementable_type: metric.statementable_type,
@@ -159,15 +166,17 @@ module ApplicationHelper
     end
 
 #   Details for the estimated metrics
-    era = year_two.first.last.year + 1
+    era = year_two.first.last.year + 1 # One year after the most recent one
     stat_id = year_one.first.last.statementable_id
     stat_type = year_one.first.last.statementable_type
-    nombre = year_one.first.last.name
-    
+    nombre = year_one.first.last.name # Name of the metric
+
+#   If the recent year is incomplete then fill the values with estimates
     year_two.merge!(filler(year_one, year_two)){|key, v1, v2| v1 } if year_two.length < 4
     
     year_two.each do |quarter, metric|
       if year_one[quarter]
+#       If there is a y/y comparison then find the growth rate
         diff = (metric.value - year_one[quarter].value)/year_one[quarter].value
       else
         diff = 0
@@ -185,11 +194,12 @@ module ApplicationHelper
 #   Fills in the present year based on the assumptions of the metric
 #   This is called for the remaining quarters for the current year
     results = Hash.new
+
 #   Details for the estimated metric
-    era = year_two.first.last.year
+    era = year_two.first.last.year # The most recent year being filled
     stat_id = year_two.first.last.statementable_id
     stat_type = year_two.first.last.statementable_type
-    nombre = year_two.first.last.name
+    nombre = year_two.first.last.name # The name of the metric
     
     4.times do |i|
 #     If the quarter we're looking at already has a metric, there's no
@@ -311,7 +321,8 @@ module ApplicationHelper
       postdata << ([label] + datum)
     end
 
-    postdata.sort!{|x,y| x.first <=> y.first }
+#   Sort data sets by the time interval
+    postdata.sort!{|x,y| y.first <=> x.first }
     postdata.unshift(predata['labels'])
     postdata
   end
@@ -335,13 +346,12 @@ module ApplicationHelper
   end
 
   def remove_dup(metric, metric_tree)
+#   When adding a year, overwrite duplicates
     name, year, quarter = metric.display_name, metric.year, metric.quarter
-    p name
     if metric_tree[name][year][quarter]
       met = Metric.where(name: metric.name, year: year, quarter: quarter,
                 statementable_type: metric.statementable_type,
                 statementable_id: metric.statementable_id)[0]
-      p met 
       met.destroy
     end
   end

@@ -40,7 +40,7 @@
         <table>
           <tr>
             <th>Line item</th>
-            <% @quarters.reverse.each_with_index do |quarter, q_i| %>
+            <% @quarters.each_with_index do |quarter, q_i| %>
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
           </tr>
@@ -48,7 +48,7 @@
             <% next unless BalanceSheet.relevant.has_value?(item) %>
             <tr>
               <td><%= item %></td>
-              <% @quarters.reverse.each_with_index do |q, q_i| %>
+              <% @quarters.each_with_index do |q, q_i| %>
                 <td><% if details[q[1]][q[0]] %>
                     <%= details[q[1]][q[0]].value.round(1) %>
                   <% else %>
@@ -64,43 +64,43 @@
         <table>
           <tr>
             <th>Composite</th>
-            <% @quarters.reverse.each_with_index do |quarter, q_i| %>
+            <% @quarters.each_with_index do |quarter, q_i| %>
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
           </tr>
           <tr>
             <td>Debt to Equity</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.debt_to_equity(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Cash per Share</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.cash_per_share(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Current Ratio</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.current_ratio(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Book Value</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.book_value(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Capital Expenditure</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.capex(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Working Capital</td>
-            <% @quarters.reverse.each_with_index do |q, q_i| %>
+            <% @quarters.each_with_index do |q, q_i| %>
               <td><%= @balance.working_capital(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
