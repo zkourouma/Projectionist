@@ -40,7 +40,7 @@
         <table>
           <tr>
             <th>Line item</th>
-            <% @quarters.each_with_index do |quarter, q_i| %>
+            <% @quarters.reverse.each_with_index do |quarter, q_i| %>
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
           </tr>
@@ -48,7 +48,7 @@
             <% next unless IncomeStatement.relevant.has_value?(item) %>
             <tr>
               <td><%= item %></td>
-              <% @quarters.each_with_index do |q, q_i| %>
+              <% @quarters.reverse.each_with_index do |q, q_i| %>
                 <td><% if details[q[1]][q[0]] %>
                       <%= details[q[1]][q[0]].value.round(1) %>
                     <% else %>
@@ -64,55 +64,55 @@
         <table>
           <tr>
             <th>Composite</th>
-            <% @quarters.each_with_index do |quarter, q_i| %>
+            <% @quarters.reverse.each_with_index do |quarter, q_i| %>
               <th><%= "#{quarter[0]}Q#{quarter[1]}" %></th>
             <% end %>
           </tr>
           <tr>
             <td>Gross Profit</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= @income.gross_profit(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Operating Profit</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= @income.operating_profit(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>EBITDA</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= @income.ebitda(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Net Income</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= @income.net_income(@metric_tree, q[0], q[1]).round(1) %></td>
             <% end %>
           </tr>
           <tr>
             <td>EPS</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= @income.eps(@metric_tree, q[0], q[1]).round(2) %></td>
             <% end %>
           </tr>
           <tr>
             <td>Gross Margin</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= (@income.gross_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
             <% end %>
           </tr>
           <tr>
             <td>Operating Margin</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= (@income.operating_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
             <% end %>
           </tr>
           <tr>
             <td>EBITDA Margin</td>
-            <% @quarters.each_with_index do |q, q_i| %>
+            <% @quarters.reverse.each_with_index do |q, q_i| %>
               <td><%= (@income.ebitda_margin(@metric_tree, q[0], q[1]) * 100).round(1) %>%</td>
             <% end %>
           </tr>
