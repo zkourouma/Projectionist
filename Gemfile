@@ -16,6 +16,7 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'debugger'
 end
 
 
@@ -46,8 +47,6 @@ gem 'unicorn'
 # gem 'capistrano'
 
 # To use debugger
-gem 'debugger-ruby_core_source'
-gem 'debugger'
 gem 'scruffy'
 gem 'backbone-on-rails'
 gem 'devise'
