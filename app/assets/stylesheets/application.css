@@ -12,12 +12,13 @@
  *= require_tree .
  */
 
-.group:after{
+.group:after {
   content: "";
   clear: both;
   display: table;
 }
-body, header, section, article, div, ul, li, a{
+
+body, header, section, article, div, ul, li, a {
   margin: 0;
   padding: 0;
   border: 0;
@@ -28,33 +29,33 @@ body, header, section, article, div, ul, li, a{
   color: #0D0D64;
 }
 
-section{
+section {
   width: 95%;
   margin: 20px auto;
   min-width: 1000px;
 }
 
 
-th{
+th {
   text-align: center;
   color: #A58A39;
 }
 
-th:first-child{
+th:first-child {
   text-align: justify;
 }
 
-a{
+a {
   text-decoration: none;
   color: #282899;
   width: 100%;
 }
 
-a:hover{
+a:hover {
   color: #DBAB1D;
 }
 
-button{
+button {
   vertical-align: top;
   color: rgba(52, 40, 153, 1);
   background: rgba(203, 203, 203, .6);
@@ -64,14 +65,14 @@ button{
   font-weight: bolder;
 }
 
-button:hover{
+button:hover {
   color: rgba(226, 209, 122, 1);
   background: rgba(203, 203, 203, .4);
   border: 1px solid rgba(150, 150, 150, .8);
   cursor: pointer;
 }
 
-input[type='submit']{
+input[type='submit'] {
   vertical-align: top;
   color: rgba(52, 40, 153, 1);
   background: rgba(203, 203, 203, .4);
@@ -82,7 +83,7 @@ input[type='submit']{
   margin-top: 14px;
 }
 
-input[type='submit']:hover{
+input[type='submit']:hover {
   color: rgba(131, 111, 0, 1);
   background: rgba(203, 203, 203, .4);
   border: 1px solid rgba(150, 150, 150, .8);
@@ -90,9 +91,10 @@ input[type='submit']:hover{
 }
 
 
-strong{
+strong {
   color: #A58A39;
 }
+
 .login {
   width: 100%;
   margin:auto;
@@ -105,16 +107,16 @@ strong{
   padding-left: 50px;
 }
 
-.login a:hover{
+.login a:hover {
   color: #EDC754;
 }
 
-.login button{
+.login button {
   margin: 20px;
   color: #EDD17E;
 }
 
-.sidebar{
+.sidebar {
   float: left;
   width: 150px;
   list-style: none;
@@ -122,35 +124,34 @@ strong{
   padding-top: 50px;
 }
 
-.sidebar li:hover{
+.sidebar li:hover {
   background: rgba(203, 203, 203, .4);
 }
-.sidebar li a{
+.sidebar li a {
   padding: 0 25px 0 0;
 }
 
-.sidebar .projects-index ul{
+.sidebar .projects-index ul {
   margin-bottom: 7px;
 }
 
-.sidebar .projects-index ul{
+.sidebar .projects-index ul {
   display: none;
 }
 
-.sidebar .projects-index:hover ul{
+.sidebar .projects-index:hover ul {
   display: inline;
   list-style: none;
-  width: 100%;
 }
 
-.sidebar .projects-index ul li a{
+.sidebar .projects-index ul li a {
   padding: 0 50px 0 10px;
 }
 
-.sidebar .projects-index ul li:hover{
+.sidebar .projects-index ul li:hover {
   background: rgba(203, 203, 203, .4);
 }
 
-.sidebar .projects-index a{
+.sidebar .projects-index a {
   padding-right: 67px;
 }
