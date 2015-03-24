@@ -48,9 +48,9 @@ module ApplicationHelper
     income = Metric.where(statementable_id: ids[0], statementable_type: 'IncomeStatement')
     balance = Metric.where(statementable_id: ids[1], statementable_type: 'BalanceSheet')
     cashflow = Metric.where(statementable_id: ids[2], statementable_type: 'CashFlow')
-    
+
     list = income + balance + cashflow
-    
+
     results = Hash.new do |hash, key|
       hash[key] = Hash.new do |hash, key|
         hash[key] = Hash.new
@@ -74,13 +74,12 @@ module ApplicationHelper
     metric_tree.each do |metric, years|
       ass = assumptions.select{|e| e.name == metric}
       ending = Date.today.strftime('%Y').to_i
-      
-      until years[ending]
+      until years[ending].length > 0
 #       Find the most recent year with a data point
         ending -= 1
       end
       start = ending - 1
-      
+
       if !ass.empty?
 #       If there are any relevant assumptions for the metric
         results[metric] = assumed(ass, years[start], years[ending])
@@ -104,10 +103,10 @@ module ApplicationHelper
     stat_id = year_two.first.last.statementable_id
     stat_type = year_two.first.last.statementable_type
     nombre = year_two.first.last.name # Name of the metric
-    
+
 #   If the recent year is incomplete, then fill the values with estimates
     year_two.merge!(assumed_filler(assumptions, year_one, year_two)){|key, v1, v2| v1 } if year_two.length < 4
-    
+
     4.times do |i|
       multiplier = growth_assumption(assumptions)
       if multiplier
@@ -173,7 +172,7 @@ module ApplicationHelper
 
 #   If the recent year is incomplete then fill the values with estimates
     year_two.merge!(filler(year_one, year_two)){|key, v1, v2| v1 } if year_two.length < 4
-    
+
     year_two.each do |quarter, metric|
       if year_one[quarter]
 #       If there is a y/y comparison then find the growth rate
@@ -200,7 +199,7 @@ module ApplicationHelper
     stat_id = year_two.first.last.statementable_id
     stat_type = year_two.first.last.statementable_type
     nombre = year_two.first.last.name # The name of the metric
-    
+
     4.times do |i|
 #     If the quarter we're looking at already has a metric, there's no
 #     need to create extra data
@@ -251,8 +250,8 @@ module ApplicationHelper
     stat_type = year_two.first.last.statementable_type
     nombre = year_two.first.last.name
     avg = 0
-    
-    year_one.each do |quarter, metric| 
+
+    year_one.each do |quarter, metric|
       next unless year_two[quarter]
       next if metric.value == 0
       avg += (year_two[quarter].value - metric.value)/metric.value
@@ -261,7 +260,7 @@ module ApplicationHelper
 #   some quarters. Meaning the year over year comparison is coming off a base
 #   that is less than zero
     avg = [avg/year_one.length, 5].min
-    
+
     4.times do |i|
       next if year_two[i + 1]
       if year_one[i+1]
@@ -277,16 +276,16 @@ module ApplicationHelper
   end
 
   def charter(metric_tree, relevance, time)
-#   'charter' was made to convert the data structure of my hash tree into an 
+#   'charter' was made to convert the data structure of my hash tree into an
 #   array of arrays that can be converted to JS and read by the API
 #   Here, 'relevance' is a hash of metrics that are relevant to the statement
 #   that the chart is being generated for
     depth = 0
     footers = Hash.new{|hash, key| hash[key] = Array.new}
-    
+
     metric_tree.each do |name, years|
       next unless relevance.has_value?(name)
-      years.each do |year, quarters| 
+      years.each do |year, quarters|
         quarters.each do |quarter, metric|
           unless footers[year].include?(quarter)
             footers[year] << quarter
@@ -295,9 +294,9 @@ module ApplicationHelper
         end
       end
     end
-    
+
     predata = Hash.new{|hash, key| hash[key] = Array.new}
-    
+
     metric_tree.each do |name, years|
       next unless relevance.has_value?(name)
 #     The labels for the chart, the first array in the data structure
